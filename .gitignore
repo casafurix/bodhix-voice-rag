@@ -1,0 +1,57 @@
+# secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+dist/
+build/
+
+# node
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+.vercel
+
+# data + model + index artefacts (large, rebuilt from ingest/)
+data/
+!data/.gitkeep
+models/
+!models/.gitkeep
+indexes/
+!indexes/.gitkeep
+*.parquet
+*.onnx
+*.safetensors
+*.bin
+qdrant_storage/
+*.snapshot
+
+# benchmark outputs: results ARE committed (they are the graded evidence),
+# but scratch and intermediate runs are not
+bench/scratch/
+bench/results/*.tmp
+
+# media (videos live on social platforms, not in git)
+*.mp4
+*.mov
+*.wav
+*.mp3
+!bench/fixtures/**/*.wav
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
