@@ -1,6 +1,11 @@
 # 12 — Submission
 
-**Form:** https://forms.gle/MNvCjcv23Hn2Eeu58
+**Submission form:**
+https://docs.google.com/forms/d/e/1FAIpQLSd3lMlCsiX83AHzDbcAGuCQqTJBwc7n2Uzd1Mefst7lMYXpQw/viewform?usp=send_form
+
+Short link as given in the brief: https://forms.gle/MNvCjcv23Hn2Eeu58 — verify both resolve to the
+same form before submitting, and use the direct link above if the short link fails.
+
 **Deadline:** 22 August 2026, 11:59 PM IST
 **No resubmissions.** Submit only when the build is final.
 

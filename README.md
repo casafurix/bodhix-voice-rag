@@ -208,7 +208,8 @@ bodhix-voice-rag/
 
 ## Submission
 
-- **Form:** https://forms.gle/MNvCjcv23Hn2Eeu58
+- **Submission form:** https://docs.google.com/forms/d/e/1FAIpQLSd3lMlCsiX83AHzDbcAGuCQqTJBwc7n2Uzd1Mefst7lMYXpQw/viewform?usp=send_form
+  (short link in the brief: https://forms.gle/MNvCjcv23Hn2Eeu58)
 - **Deadline:** 22 August 2026, 11:59 PM. **No resubmissions.**
 - **Required:** GitHub repo link, live working link, 2 videos
   - Video 1 — 90 s team/process video
