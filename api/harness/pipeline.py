@@ -82,16 +82,27 @@ async def _run_pipeline(request: AskRequest, ctx: Context, deadline: Deadline) -
         ctx.degrade("reduced_candidates")
 
     async def _retrieve():
+        # NOTE: Qdrant's point `.id` is an internal UUID (see
+        # ingest/build_index.py) and must never leak into fusion/citations —
+        # it isn't shared with the BM25 arm's identifier space. The payload's
+        # `chunk_id` field (our own human-readable id) is what both arms and
+        # the assembled citations use, so RRF can actually fuse the same
+        # logical chunk across dense and sparse hits.
         ranked_lists: list[list[ScoredChunk]] = []
         chunk_payloads: dict[str, dict] = {}
 
         for strategy_id in STRATEGY_IDS:
             hits = search_dense(strategy_id, query_vector, top_k=top_k)
-            ranked_lists.append(
-                [ScoredChunk(chunk_id=str(h.id), score=h.score) for h in hits]
-            )
             for h in hits:
-                chunk_payloads[str(h.id)] = h.payload or {}
+                payload = h.payload or {}
+                cid = payload.get("chunk_id", str(h.id))
+                chunk_payloads[cid] = payload
+            ranked_lists.append(
+                [
+                    ScoredChunk(chunk_id=(h.payload or {}).get("chunk_id", str(h.id)), score=h.score)
+                    for h in hits
+                ]
+            )
 
         sparse_hits = search_sparse(text, top_k=top_k)
         ranked_lists.append(

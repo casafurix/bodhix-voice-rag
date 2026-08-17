@@ -39,6 +39,7 @@ def chunk(doc: PassageDoc) -> list[Chunk]:
                 embed_text=child_text,  # embedded: the small child only
                 char_span=(child_start, child_end),
                 language=doc.language,
+                query_type=doc.query_type,
                 is_selected=doc.is_selected,
             )
         )

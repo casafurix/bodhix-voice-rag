@@ -39,6 +39,7 @@ class Chunk(BaseModel):
     embed_text: str  # the text actually embedded — may differ from `text`
     char_span: tuple[int, int]
     language: str
+    query_type: str
     is_selected: bool
     extra: dict = {}
 

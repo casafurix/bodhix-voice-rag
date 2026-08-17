@@ -39,6 +39,7 @@ def chunk(doc: PassageDoc) -> list[Chunk]:
             embed_text=doc.free_question,  # embedded: the question it answers
             char_span=(0, len(doc.text)),
             language=doc.language,
+            query_type=doc.query_type,
             is_selected=doc.is_selected,
             extra={"source": "free_query_field"},
         )

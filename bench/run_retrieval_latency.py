@@ -69,10 +69,17 @@ def search(query: str, top_k: int = 50) -> SearchTiming:
     query_vector = embed_query(query)
     t1 = time.perf_counter()
 
+    # h.id is Qdrant's internal UUID (see ingest/build_index.py) — the
+    # payload's chunk_id is the identifier shared with the BM25 arm below.
     ranked_lists: list[list[ScoredChunk]] = []
     for strategy_id in STRATEGY_IDS:
         hits = search_dense(strategy_id, query_vector, top_k=top_k)
-        ranked_lists.append([ScoredChunk(chunk_id=str(h.id), score=h.score) for h in hits])
+        ranked_lists.append(
+            [
+                ScoredChunk(chunk_id=(h.payload or {}).get("chunk_id", str(h.id)), score=h.score)
+                for h in hits
+            ]
+        )
 
     sparse_hits = search_sparse(query, top_k=top_k)
     ranked_lists.append([ScoredChunk(chunk_id=cid, score=s) for cid, s in sparse_hits])

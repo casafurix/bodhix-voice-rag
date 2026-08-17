@@ -27,6 +27,7 @@ def chunk(doc: PassageDoc) -> list[Chunk]:
                 embed_text=text,
                 char_span=(0, len(text)),
                 language=doc.language,
+                query_type=doc.query_type,
                 is_selected=doc.is_selected,
             )
         ]
@@ -47,6 +48,7 @@ def chunk(doc: PassageDoc) -> list[Chunk]:
                 embed_text=window,
                 char_span=(start, end),
                 language=doc.language,
+                query_type=doc.query_type,
                 is_selected=doc.is_selected,
             )
         )

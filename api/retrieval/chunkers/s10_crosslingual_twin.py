@@ -39,6 +39,7 @@ def chunk(doc: PassageDoc) -> list[Chunk]:
             embed_text=doc.twin_text,  # embedded: the twin's language
             char_span=(0, len(doc.text)),
             language=doc.language,
+            query_type=doc.query_type,
             is_selected=doc.is_selected,
             extra={"twin_doc_id": doc.twin_doc_id},
         )

@@ -40,6 +40,7 @@ def chunk(doc: PassageDoc) -> list[Chunk]:
                 embed_text=sentence,  # embedded: the sentence alone, undiluted
                 char_span=(window_start, window_end),
                 language=doc.language,
+                query_type=doc.query_type,
                 is_selected=doc.is_selected,
             )
         )
