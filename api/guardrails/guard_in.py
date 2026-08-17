@@ -17,7 +17,7 @@ from api.harness.stage import StageShortCircuit
 MIN_CHARS = 3
 MAX_CHARS = 512
 
-# Deliberately small, curated, multilingual (en/hi/ta) — see docs/07-guardrails.md
+# Deliberately small, curated, multilingual (en/hi/bn) — see docs/07-guardrails.md
 # on why an English-only list is security theatre on an Indic pipeline.
 _INJECTION_PATTERNS = [
     r"ignore (all |the )?(previous|prior|above) instructions",
@@ -25,7 +25,7 @@ _INJECTION_PATTERNS = [
     r"pretend (that )?you are",
     r"पिछले निर्देश (भूल|छोड़)",
     r"इस निर्देश को अनदेखा",
-    r"முந்தைய அறிவுரைகளை புறக்கணி",
+    r"(আগের|পূর্ববর্তী) নির্দেশ (ভুলে যাও|উপেক্ষা কর)",
 ]
 _INJECTION_RE = regex.compile("|".join(_INJECTION_PATTERNS), regex.IGNORECASE)
 

@@ -16,8 +16,8 @@ import regex
 from api.harness.stage import StageShortCircuit
 from api.schemas import OutputGuardrailTrace
 
-# Covers ASCII digits plus Devanagari (०-९) and Tamil (௦-௯) numerals.
-_NUMBER_RE = regex.compile(r"[0-9०-९௦-௯]+(?:[.,][0-9०-९௦-௯]+)*")
+# Covers ASCII digits plus Devanagari (०-९) and Bengali (০-৯) numerals.
+_NUMBER_RE = regex.compile(r"[0-9०-९০-৯]+(?:[.,][0-9०-९০-৯]+)*")
 
 _LEXICAL_OVERLAP_MIN = 0.3  # fraction of answer content-words that must appear in context
 
