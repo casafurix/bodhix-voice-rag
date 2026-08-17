@@ -1,5 +1,15 @@
 # 07 — Guardrails
 
+> **MVP scope note:** input gate (checks 1,2,5,6,7 — length, unsupported-language, unsafe,
+> injection), coverage gate, and output gate (numeric, citation, span, language, quality-floor)
+> are all implemented and verified against real queries. **Groundedness uses lexical-overlap,
+> not NLI entailment** (the doc's own documented fallback, "Groundedness via NLI entailment").
+> Audio-duration-sanity/ASR-confidence checks (3-4) and PII redaction (8) are deferred — voice
+> input hasn't been exercised yet. **The coverage-gate thresholds are an uncalibrated
+> placeholder** — a real off-topic query was incorrectly answered in testing; the ROC-sweep
+> calibration this page calls for hasn't been run. Live status:
+> [docs/13-build-status.md](13-build-status.md).
+
 > The brief: *"Add guardrails around your model — handling for off-topic queries, unsafe/inappropriate
 > inputs, hallucination checks, or answers not grounded in the retrieved context. Show that your
 > system knows when not to answer, not just how to answer."*

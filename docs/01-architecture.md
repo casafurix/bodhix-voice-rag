@@ -1,5 +1,10 @@
 # 01 — Architecture
 
+> **MVP scope note:** the reranker (stage 6) and the abstractive "rich path" (stage 10) described
+> below are **not built** — extractive-only, no reranker, satisfies the brief without either.
+> Everything else on this page (deadline-propagated DAG, in-process retrieval, guardrail veto
+> points) is running as designed. Live status: [docs/13-build-status.md](13-build-status.md).
+
 ## Design constraints, in priority order
 
 1. **`t_core` P100 < 200 ms.** This is a hard constraint, not a goal. It vetoes any design that

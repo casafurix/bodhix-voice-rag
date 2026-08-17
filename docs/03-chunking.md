@@ -1,5 +1,11 @@
 # 03 — Chunking and indexing
 
+> **MVP scope note:** **six** of the twelve strategies below are shipped —
+> S1, S2, S3, S5, S9, S10 (exactly the "minimum viable scope" tiers 1+2+4 further down this
+> page) — not S4, S6, S7, S8, S12. S9 currently indexes only the dataset's free `query` field,
+> no LLM-generated questions. Verified working end-to-end against real data; ablation numbers
+> not run yet. Live status: [docs/13-build-status.md](13-build-status.md).
+
 > The brief: *"Chunking strategy should be vast — don't submit a single naive fixed-size chunking
 > approach. We want to see real thought put into how the dataset is split, indexed, and
 > retrieved."*

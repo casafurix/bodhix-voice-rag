@@ -1,5 +1,14 @@
 # 11 — Roadmap
 
+> **STATUS: superseded by reality.** This plan assumed 3 people working parallel tracks for 10
+> days. That staffing didn't hold — one person (`casafurix`) is building this solo on a
+> compressed timeline. The day-by-day plan and track ownership below are no longer being
+> followed literally, but the **"Descoping order"** and **"Never cut"** sections near the bottom
+> are still exactly what's guiding scope decisions — every scope cut recorded in
+> [docs/13-build-status.md](13-build-status.md) traces back to this page's own pre-declared
+> priorities, not an ad-hoc decision made under pressure. Read
+> [docs/13-build-status.md](13-build-status.md) for what's actually been built and what's next.
+
 **Launch:** 13 August 2026 · **Deadline:** 22 August 2026, 11:59 PM · **10 days, no resubmissions.**
 
 ## Team and ownership

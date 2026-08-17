@@ -1,5 +1,12 @@
 # 02 — Dataset: MSMARCO-XI
 
+> **MVP scope note:** shipped language set is **English + Hindi + Bengali** (3, not the 5 —
+> en/hi/ta/bn/mr — discussed below), and ingest currently pulls `validation/hinval.parquet` +
+> `validation/benval.parquet` directly rather than the row-group HTTP-streaming approach
+> described in "Step 0" (two ~460MB files don't need that machinery — see
+> `ingest/stream_corpus.py`). Live status, real dedup/chunk counts:
+> [docs/13-build-status.md](13-build-status.md).
+
 ## What we are actually given
 
 [`ai4bharat/MSMARCO-XI`](https://huggingface.co/datasets/ai4bharat/MSMARCO-XI), from the
