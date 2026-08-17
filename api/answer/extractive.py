@@ -11,16 +11,10 @@ scoring is additive once reranker/ ships.
 from __future__ import annotations
 
 import regex
-
-from api.retrieval.assemble import AssembledChunk
 from pydantic import BaseModel
 
-_SENTENCE_SPLIT_RE = regex.compile(r"(?<=[.!?।॥])\s+")
-
-
-def _split_sentences(text: str) -> list[str]:
-    sentences = [s.strip() for s in _SENTENCE_SPLIT_RE.split(text) if s.strip()]
-    return sentences or [text.strip()]
+from api.retrieval.assemble import AssembledChunk
+from api.retrieval.text_utils import split_sentences
 
 
 def _content_words(text: str) -> set[str]:
@@ -36,7 +30,7 @@ class ExtractiveAnswer(BaseModel):
 
 def select_span(query: str, top_chunk: AssembledChunk) -> ExtractiveAnswer:
     query_words = _content_words(query)
-    sentences = _split_sentences(top_chunk.text)
+    sentences = split_sentences(top_chunk.text)
 
     best_sentence = sentences[0]
     best_overlap = -1.0

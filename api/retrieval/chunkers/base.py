@@ -23,6 +23,11 @@ class PassageDoc(BaseModel):
     is_selected: bool
     twin_doc_id: str | None = None  # aligned passage in the other language, if any
     twin_text: str | None = None
+    # The dataset's own `query`/`Eng_Query` field for this row — a real question
+    # this passage answers, at zero LLM cost. See docs/03-chunking.md, S9's
+    # "free gold question" note. LLM-generated questions (3-5 per passage) are
+    # cut from the MVP; only this free one is indexed.
+    free_question: str | None = None
 
 
 class Chunk(BaseModel):
