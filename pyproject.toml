@@ -1,0 +1,44 @@
+[project]
+name = "bodhix-voice-rag"
+version = "0.1.0"
+description = "BodhiX — Voice-enabled RAG over AI4Bharat MSMARCO-XI (HH Goa 2026, Task 2)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "httpx>=0.27",
+    "orjson>=3.10",
+    # retrieval
+    "qdrant-client>=1.10",
+    "fastembed>=0.3.6",
+    "bm25s>=0.2",
+    # ingest
+    "polars>=1.6",
+    "pyarrow>=17.0",
+    "blake3>=0.4",
+    "datasets>=2.20",
+    # text/lang utilities
+    "regex>=2024.7.24",
+    "langdetect>=1.0.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.6",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["api", "ingest", "bench"]

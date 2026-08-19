@@ -7,8 +7,15 @@ task, **Build a Voice-Enabled RAG Model**.
 
 Task 1 (`Frame in Goa`) lives in a separate repository. This repo is Task 2 only.
 
-> **Status: planning.** Nothing is implemented yet. This repo currently contains the brief,
-> the architecture plan, and the decision records in [`docs/`](docs/). Code lands next.
+> **Status: building, backend-first.** The end-to-end pipeline runs against real data — a
+> text query goes in, retrieval + guardrails + an extractive answer come out, with citations
+> and a full timing trace. Team staffing changed since the original plan (`docs/11-roadmap.md`)
+> was written — one person is building this solo on a compressed timeline — so the shipped
+> scope is intentionally smaller than the original 3-person plan in `docs/00`-`12`. What's
+> actually done, what's cut and why, and what's next is tracked honestly and continuously in
+> **[docs/13-build-status.md](docs/13-build-status.md)** — read that first if you want the real
+> picture rather than the original ambition. No frontend yet; that's next once the backend
+> numbers are real.
 
 ---
 
@@ -156,32 +163,38 @@ Component-by-component detail and the reasoning for each choice:
 
 ### Stack
 
-| Layer | Choice | Why |
-|---|---|---|
-| Retrieval + harness | Python 3.12, FastAPI, Pydantic v2 | The embedding / ANN / reranker ecosystem is Python-native. Pydantic gives typed stage contracts for free. |
-| Frontend | Next.js on Vercel | Same stack as Task 1, zero-config deploy, `MediaRecorder` + WebSocket is trivial. |
-| Vector DB | Qdrant, colocated with the API | A network hop to a hosted vector DB costs 20–80 ms we do not have. Full options matrix in [docs/04-retrieval.md](docs/04-retrieval.md). |
-| Embeddings | `multilingual-e5-small`, ONNX int8, 384-d | Covers all 14 dataset languages, ~4–8 ms query encode on CPU. Alternatives evaluated in [docs/04-retrieval.md](docs/04-retrieval.md). |
-| STT | Sarvam `saaras:v3` primary, ElevenLabs `scribe_v2` failover | Sarvam is Indic-native and India-hosted, which matches both the corpus and the users. [docs/05-speech-to-text.md](docs/05-speech-to-text.md) |
-| Region | Everything in `ap-south` / Mumbai | Region choice buys more latency than any amount of micro-optimisation. |
+Design intent vs. what's actually running — full detail in
+[docs/13-build-status.md](docs/13-build-status.md).
+
+| Layer | Designed | Actually running | Why the difference (if any) |
+|---|---|---|---|
+| Retrieval + harness | Python 3.12, FastAPI, Pydantic v2 | Same | — |
+| Frontend | Next.js on Vercel | Not built yet | Backend-first; text-in/text-out `/ask` is solid before UI work starts |
+| Vector DB | Qdrant, colocated with the API | Same, embedded/local mode | — |
+| Embeddings | `multilingual-e5-small`, ONNX int8, 384-d | `paraphrase-multilingual-MiniLM-L12-v2`, 384-d | Installed `fastembed` doesn't bundle e5-small; MiniLM is the doc's own documented fallback |
+| STT | Sarvam `saaras:v3` primary, ElevenLabs failover | Sarvam only; ElevenLabs interface stubbed, not wired | Brief says "pick one"; failover was resilience insurance, not a requirement |
+| Languages | 5 (en, hi, ta, bn, mr) | 3 (**en, hi, bn**) | Solo build — fewer languages the builder can personally verify |
+| Chunking strategies | 12 | 6 (S1, S2, S3, S5, S9, S10) | The plan's own pre-declared minimum-viable scope |
+| Region | Everything in `ap-south` / Mumbai | Not deployed yet | Local dev only so far |
 
 ---
 
-## Repository layout (planned)
+## Repository layout
 
 ```
 bodhix-voice-rag/
 ├── README.md
-├── docs/                     ← the plan (this is what exists today)
-├── api/                      ← FastAPI harness
-│   ├── harness/              ← stages, budget, retries, tracing
-│   ├── retrieval/            ← chunkers, indexers, hybrid search, rerank
-│   ├── guardrails/           ← input + output gates
-│   └── stt/                  ← Sarvam + ElevenLabs adapters
-├── ingest/                   ← MSMARCO-XI download, dedup, chunk, embed, index
-├── bench/                    ← latency + retrieval-quality harnesses
-│   └── results/              ← committed CSVs and charts (the graded numbers)
-└── web/                      ← Next.js frontend
+├── docs/                     ← the plan, plus docs/13-build-status.md (the live status)
+├── api/                      ← FastAPI harness — running
+│   ├── harness/              ← stages, deadline, retries, the /ask DAG
+│   ├── retrieval/             ← chunkers (6 shipped), embed, Qdrant, BM25, RRF, assembly
+│   ├── guardrails/            ← input gate, coverage gate, output gate
+│   ├── answer/                ← extractive fast-path answer
+│   └── stt/                   ← Sarvam adapter (live) + ElevenLabs (stubbed)
+├── ingest/                    ← MSMARCO-XI stream, dedup, filter, chunk, embed, index — running
+├── bench/                     ← run_retrieval_latency.py so far; more to come
+│   └── results/               ← not populated yet — no benchmark numbers are real yet
+└── web/                       ← not built yet
 ```
 
 ---
@@ -190,10 +203,11 @@ bodhix-voice-rag/
 
 | Doc | Contents |
 |---|---|
+| [13-build-status.md](docs/13-build-status.md) | **Start here.** What's actually built vs. planned, verified results, known gaps, next steps |
 | [00-task-brief.md](docs/00-task-brief.md) | The brief as issued, plus our reading of each ambiguous clause |
 | [01-architecture.md](docs/01-architecture.md) | System design, request lifecycle, service topology |
 | [02-dataset.md](docs/02-dataset.md) | MSMARCO-XI analysis, subsetting, dedup, corpus construction |
-| [03-chunking.md](docs/03-chunking.md) | The twelve chunking strategies and the ablation plan |
+| [03-chunking.md](docs/03-chunking.md) | The twelve designed chunking strategies (six shipped) and the ablation plan |
 | [04-retrieval.md](docs/04-retrieval.md) | Vector DB options matrix, embeddings, hybrid search, reranking |
 | [05-speech-to-text.md](docs/05-speech-to-text.md) | Sarvam vs ElevenLabs, streaming, failover, decision criteria |
 | [06-harness.md](docs/06-harness.md) | Stage DAG, budgets, retries, degradation ladder, tracing |

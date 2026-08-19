@@ -1,5 +1,12 @@
 # 05 — Speech-to-text: Sarvam vs ElevenLabs
 
+> **MVP scope note:** Sarvam adapter (`api/stt/sarvam.py`) is implemented (non-streaming
+> `transcribe()` only — no realtime WebSocket streaming, no speculative retrieval).
+> **ElevenLabs failover is not wired** — `api/stt/elevenlabs.py` implements the same interface
+> as a stub so it can be activated later, but the harness never calls it. Neither adapter has
+> been exercised against a real audio clip yet; the pipeline has only been tested via `/ask`'s
+> text path so far. Live status: [docs/13-build-status.md](13-build-status.md).
+
 > The brief: *"Use either Sarvam or ElevenLabs for voice-to-text. Pick one."*
 
 ## Decision

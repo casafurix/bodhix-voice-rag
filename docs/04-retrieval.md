@@ -1,5 +1,14 @@
 # 04 — Retrieval: vector DB, embeddings, hybrid search, reranking
 
+> **MVP scope note:** Qdrant decision below is unchanged, but running with **one vector field
+> + a `strategy` payload filter**, not named-vectors-per-strategy (see `api/retrieval/qdrant_store.py`
+> for why the original framing didn't hold for six differently-shaped chunking strategies).
+> Embedding model is `paraphrase-multilingual-MiniLM-L12-v2`, not `multilingual-e5-small`
+> (`fastembed` doesn't bundle the latter — see the embeddings section below). **Reranking is not
+> built.** Hybrid search + RRF fusion work, but the 6 strategy searches currently run
+> sequentially, not concurrently as designed below — a known, unfixed latency gap. Live status:
+> [docs/13-build-status.md](13-build-status.md).
+
 Everything here is governed by one rule from [01-architecture.md](01-architecture.md): **no
 network hops inside the retrieval loop.** A 200 ms budget cannot absorb a hosted service call
 between stages.

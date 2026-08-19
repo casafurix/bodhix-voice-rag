@@ -1,5 +1,13 @@
 # 06 — The harness
 
+> **MVP scope note:** the DAG in `api/harness/pipeline.py` is running end-to-end (normalise →
+> guard_in → embed → retrieve → fuse → coverage_gate → assemble → answer_fast → guard_out), but
+> without the `rerank` and `answer_rich` stages (both cut — see `docs/01-architecture.md`'s
+> scope note). The degradation ladder currently only has one rung wired (reduce candidates
+> 50→20); rungs referencing rerank/rich-path don't apply since those stages don't exist yet.
+> Retries/circuit-breakers (`api/harness/retry.py`) are implemented but not yet exercised against
+> a real STT failure. Live status: [docs/13-build-status.md](13-build-status.md).
+
 > The brief: *"Your model/pipeline should be run inside a proper harness — structured orchestration
 > around the model (tool calls, retries, structured input/output handling, error recovery) rather
 > than a single raw prompt-in, text-out call."*
