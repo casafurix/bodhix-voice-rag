@@ -26,7 +26,7 @@ multi-vector search. At T0/T1 scale that cost is negligible.
 
 from __future__ import annotations
 
-from functools import lru_cache
+import threading
 
 from qdrant_client import QdrantClient, models
 
@@ -36,10 +36,60 @@ COLLECTION_NAME = "chunks"
 VECTOR_NAME = "dense"
 VECTOR_DIM = 384  # matches api/retrieval/embed.py's model output dim
 
+# Second named vector on the SAME points, populated by ingest/build_index.py by
+# re-embedding the same corpus with the NVIDIA API — this is the case
+# named-vectors-per-point is actually for (see module docstring above): the
+# same logical chunk, a second vector representation. Text queries search
+# "dense" (local, fast, free); voice queries search "dense_nvidia" (online),
+# since a voice query is embedded via the NVIDIA API and a cross-space
+# comparison against "dense" would be meaningless. See docs/13-build-status.md.
+VECTOR_NAME_NVIDIA = "dense_nvidia"
 
-@lru_cache
+
+_client: QdrantClient | None = None
+_client_lock = threading.Lock()
+
+
 def get_client() -> QdrantClient:
-    return QdrantClient(path=settings.qdrant_local_path)
+    """Lazy singleton, guarded by a real lock — not `@lru_cache`.
+
+    The retrieve stage now dispatches 6 dense-strategy searches concurrently
+    via `asyncio.to_thread` (api/harness/pipeline.py), so on the first
+    request after startup, all 6 worker threads call this near-simultaneously.
+    `lru_cache` does NOT serialize concurrent calls on a cache miss — it can
+    let multiple threads construct independent `QdrantClient` instances in
+    parallel, and Qdrant's embedded/local mode holds an exclusive file lock
+    on its storage path, so the second constructor call fails with
+    "already accessed by another instance". Double-checked locking here
+    guarantees exactly one `QdrantClient` is ever constructed.
+
+    Deploy note: `QDRANT_LOCAL_PATH=:memory:` runs Qdrant purely in RAM (no
+    disk, no file lock) — the fit for an ephemeral/serverless single
+    instance that repopulates from ingest/embeddings_cache/ on cold start
+    (seconds, no embedding calls — see ingest/load_cached_embeddings.py)
+    rather than mounting a persistent volume. Either mode is still a
+    single-process embedded store, not a server — it does not support
+    multiple concurrent instances/replicas sharing one index; that needs a
+    real Qdrant server (self-hosted or Cloud), not this module.
+    """
+    global _client
+    if _client is not None:
+        return _client
+    with _client_lock:
+        if _client is None:
+            if settings.qdrant_local_path == ":memory:":
+                _client = QdrantClient(location=":memory:")
+            else:
+                _client = QdrantClient(path=settings.qdrant_local_path)
+        return _client
+
+
+def _reset_client_for_tests() -> None:
+    """Test-only: drop the singleton so a fresh get_client() (or a
+    monkeypatched replacement) starts clean. Not used by production code.
+    """
+    global _client
+    _client = None
 
 
 def ensure_collection() -> None:
@@ -57,7 +107,13 @@ def ensure_collection() -> None:
                         type=models.ScalarType.INT8, quantile=0.99, always_ram=True
                     )
                 ),
-            )
+            ),
+            # No quantization here — small T0 corpus, and the NVIDIA-embedded
+            # field is populated once at ingest time, not latency-sensitive.
+            VECTOR_NAME_NVIDIA: models.VectorParams(
+                size=settings.nvidia_embed_dim,
+                distance=models.Distance.COSINE,
+            ),
         },
     )
     for field_name in ("language", "query_type", "has_numbers", "strategy", "parent_id"):
@@ -80,12 +136,13 @@ def search_dense(
     query_vector: list[float],
     top_k: int = 50,
     query_filter: models.Filter | None = None,
+    vector_name: str = VECTOR_NAME,
 ) -> list[models.ScoredPoint]:
     client = get_client()
     result = client.query_points(
         collection_name=COLLECTION_NAME,
         query=query_vector,
-        using=VECTOR_NAME,
+        using=vector_name,
         limit=top_k,
         query_filter=_strategy_filter(strategy_id, query_filter),
         with_payload=True,

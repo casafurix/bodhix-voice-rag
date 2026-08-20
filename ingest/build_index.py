@@ -23,10 +23,17 @@ import uuid
 import regex
 from qdrant_client import models
 
+from api.llm.nvidia_client import embed_passages_online
 from api.retrieval.chunkers.base import Chunk, PassageDoc
 from api.retrieval.chunkers.registry import chunk_with_all_strategies
 from api.retrieval.embed import embed_passages
-from api.retrieval.qdrant_store import COLLECTION_NAME, VECTOR_NAME, ensure_collection, get_client
+from api.retrieval.qdrant_store import (
+    COLLECTION_NAME,
+    VECTOR_NAME,
+    VECTOR_NAME_NVIDIA,
+    ensure_collection,
+    get_client,
+)
 from api.retrieval.sparse import build_index as build_sparse_index
 from ingest.explode_dedupe import DedupIndex, explode_rows
 from ingest.filters import FilterCounts, passes_filters
@@ -83,15 +90,20 @@ def _embed_and_upsert(chunks: list[Chunk]) -> None:
     total = len(chunks)
     for start in range(0, total, EMBED_BATCH_SIZE):
         batch = chunks[start : start + EMBED_BATCH_SIZE]
-        vectors = embed_passages([c.embed_text for c in batch])
+        embed_texts = [c.embed_text for c in batch]
+        # Both vector sets computed before building points — Qdrant requires
+        # every point to supply every declared named vector in one write.
+        vectors_local = embed_passages(embed_texts)
+        vectors_nvidia = embed_passages_online(embed_texts)
 
         points = [
             models.PointStruct(
                 id=_point_id(chunk.chunk_id),
-                vector={VECTOR_NAME: vector},
+                vector={VECTOR_NAME: v_local, VECTOR_NAME_NVIDIA: v_nvidia},
                 payload={
                     "chunk_id": chunk.chunk_id,
                     "doc_id": chunk.doc_id,
+                    "embed_text": chunk.embed_text,
                     "parent_id": chunk.parent_id,
                     "strategy": chunk.strategy,
                     "text": chunk.text,
@@ -101,7 +113,7 @@ def _embed_and_upsert(chunks: list[Chunk]) -> None:
                     "has_numbers": bool(_HAS_NUMBER_RE.search(chunk.text)),
                 },
             )
-            for chunk, vector in zip(batch, vectors)
+            for chunk, v_local, v_nvidia in zip(batch, vectors_local, vectors_nvidia)
         ]
         client.upsert(collection_name=COLLECTION_NAME, points=points)
         print(f"[ingest] embedded + upserted {min(start + EMBED_BATCH_SIZE, total)}/{total} chunks")

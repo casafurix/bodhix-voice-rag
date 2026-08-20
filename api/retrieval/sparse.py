@@ -53,7 +53,15 @@ def _corpus_item_to_chunk_id(item) -> str:
 
 
 def search_sparse(query: str, top_k: int = 50) -> list[tuple[str, float]]:
+    retriever = _retriever()
+    # bm25s raises ValueError if k exceeds the indexed corpus size — a real
+    # gap that only bites on a small corpus (a test fixture, or an early T0
+    # slice), never on the full MSMARCO ingest. Clamp defensively.
+    num_docs = retriever.scores["num_docs"]
+    effective_k = min(top_k, num_docs)
+    if effective_k == 0:
+        return []
     query_tokens = bm25s.tokenize(query, stopwords=None, show_progress=False)
-    results, scores = _retriever().retrieve(query_tokens, k=top_k)
+    results, scores = retriever.retrieve(query_tokens, k=effective_k, show_progress=False)
     chunk_ids = [_corpus_item_to_chunk_id(item) for item in results[0].tolist()]
     return list(zip(chunk_ids, scores[0].tolist()))

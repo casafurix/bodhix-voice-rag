@@ -199,6 +199,37 @@ bodhix-voice-rag/
 
 ---
 
+## Running it
+
+**Locally:**
+```
+uv sync
+uv run python -m ingest.load_cached_embeddings   # populates from the committed parquet cache, ~1 min, no API calls
+uv run uvicorn api.main:app --reload --port 8000
+```
+Only rerun `uv run python -m ingest.build_index` (full re-embed, ~15+ min, calls the NVIDIA API for
+every chunk) when the corpus itself changes — then `uv run python -m ingest.export_embeddings` to
+refresh the committed cache in `ingest/embeddings_cache/`.
+
+**Deploying (free): Render, Docker web service.** (Hugging Face Spaces' Docker SDK moved behind a
+paid plan on 8 July 2026, so that's no longer a free option — Render is, no credit card required.)
+The `Dockerfile` here is host-agnostic and already reads `$PORT`, so no changes are needed:
+
+1. Push this repo to GitHub (already at `origin`).
+2. On [dashboard.render.com](https://dashboard.render.com), **New → Web Service**, connect the
+   GitHub repo. Render auto-detects the `Dockerfile`.
+3. Under **Environment**, add `SARVAM_API_KEY` and `NVIDIA_API_KEY` (never committed — the
+   Dockerfile doesn't bake them in).
+4. Deploy. Render builds the image and runs it on the port it injects via `$PORT`.
+
+The container starts by running `ingest/load_cached_embeddings.py` against the committed parquet
+cache (no re-embedding, no NVIDIA calls) and then `uvicorn` — verified locally end-to-end with
+`docker build` + `docker run`: ~75s from cold start to serving real, grounded answers. Render's
+free tier sleeps after 15 min idle and pays that cold start again on the next request; there's no
+persistent volume involved, since every start just repopulates from the cache.
+
+---
+
 ## Documentation index
 
 | Doc | Contents |

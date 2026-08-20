@@ -16,6 +16,17 @@ class Settings(BaseSettings):
     sarvam_api_key: str = ""
     elevenlabs_api_key: str = ""  # stub only, not wired in MVP
 
+    # LLM / embedding (NVIDIA NIM, OpenAI-compatible) — see api/llm/nvidia_client.py
+    nvidia_api_key: str = ""
+    nvidia_base_url: str = "https://integrate.api.nvidia.com/v1"
+    nvidia_embed_model: str = "nvidia/nemotron-3-embed-1b"
+    nvidia_llm_model: str = "nvidia/llama-3.3-nemotron-super-49b-v1.5"
+    nvidia_embed_dim: int = 2048  # confirmed live: nvidia/nemotron-3-embed-1b returns 2048-dim
+    # 35s: nvidia_llm_model (a reasoning model) alone takes 8-25s live for one
+    # abstractive answer, on top of STT + retrieval + guardrails. See
+    # api/llm/nvidia_client.py's agenerate_answer docstring.
+    voice_default_budget_ms: float = 35000.0
+
     # retrieval / index
     qdrant_local_path: str = "./ingest/data/qdrant_storage"
     bm25_index_path: str = "./ingest/data/bm25_index"

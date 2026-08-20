@@ -37,6 +37,13 @@ indexes/
 qdrant_storage/
 *.snapshot
 
+# embeddings cache IS committed (sharded parquet) — see
+# ingest/export_embeddings.py / ingest/load_cached_embeddings.py. This is
+# what lets a fresh clone populate the index without re-calling the
+# embedding APIs.
+!ingest/embeddings_cache/
+!ingest/embeddings_cache/**/*.parquet
+
 # benchmark outputs: results ARE committed (they are the graded evidence),
 # but scratch and intermediate runs are not
 bench/scratch/
@@ -55,3 +62,5 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+/frontend/

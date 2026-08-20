@@ -1,10 +1,14 @@
 """Output guardrails — see docs/07-guardrails.md.
 
 MVP scope: numeric grounding, citation integrity, language consistency,
-extractive span verification, answer-quality floor, and lexical-overlap
-groundedness as the documented fallback for the NLI entailment model (which
-is cut from the MVP — see docs/07-guardrails.md, "Groundedness via NLI
-entailment", fallback paragraph).
+answer-quality floor, and lexical-overlap groundedness as the documented
+fallback for the NLI entailment model (which is cut from the MVP — see
+docs/07-guardrails.md, "Groundedness via NLI entailment", fallback
+paragraph). Extractive span verification only applies to extractive
+answers — abstractive answers (api/answer/abstractive.py) are, by
+construction, not a verbatim substring of any single chunk, so they're
+grounded instead by the numeric/citation/lexical-overlap checks, which all
+already operate on arbitrary answer text.
 """
 
 from __future__ import annotations
@@ -97,10 +101,12 @@ def run_guard_out(
     answer_lang: str,
     cited_chunk_ids: list[str],
     supplied_chunk_ids: set[str],
-    cited_chunk_text: str,
+    cited_chunk_text: str | None = None,
+    answer_mode: Literal["extractive", "abstractive"] = "extractive",
 ) -> OutputGuardrailTrace:
     check_quality_floor(answer_text, query)
-    check_extractive_span(answer_text, cited_chunk_text)
+    if answer_mode == "extractive":
+        check_extractive_span(answer_text, cited_chunk_text or "")
     numeric_result = check_numeric_grounding(answer_text, context)
     citation_result = check_citation_integrity(cited_chunk_ids, supplied_chunk_ids)
     language_match = check_language_match(answer_lang, query_lang)

@@ -5,9 +5,9 @@ harness/pipeline.py reads and writes these models, so freezing the shape
 here is what lets ingestion, retrieval and guardrail work happen without
 waiting on each other.
 
-Scope note (MVP): no `rich_path` / abstractive answer, no reranker fields.
-Both are cut per the descoping plan in docs/11-roadmap.md; the schema still
-reserves space for them (commented) so re-adding is additive, not a rewrite.
+Scope note: abstractive answers (NVIDIA LLM) are wired in as `AskOptions.answer_mode`,
+with extractive as the default/fallback. No reranker fields yet — still cut per the
+descoping plan in docs/11-roadmap.md.
 """
 
 from __future__ import annotations
@@ -15,6 +15,8 @@ from __future__ import annotations
 from typing import Literal
 
 from pydantic import BaseModel, Field
+
+from api.stt.base import Transcript
 
 RefusalCode = Literal[
     "NO_SPEECH",
@@ -33,6 +35,7 @@ RefusalCode = Literal[
 
 class AskOptions(BaseModel):
     rerank: Literal["auto", "off"] = "off"  # MVP default: no reranker built yet
+    answer_mode: Literal["extractive", "abstractive"] = "extractive"
 
 
 class AskRequest(BaseModel):
@@ -46,12 +49,12 @@ class Citation(BaseModel):
     chunk_id: str
     score: float
     strategy: str
-    span: tuple[int, int]
+    span: tuple[int, int] | None = None  # None for abstractive citations (whole-chunk, not a substring)
 
 
 class Answer(BaseModel):
     text: str
-    mode: Literal["extractive"] = "extractive"  # only mode in MVP
+    mode: Literal["extractive", "abstractive"]
     language: str
 
 
@@ -83,3 +86,4 @@ class AskResponse(BaseModel):
     guardrails: GuardrailTrace = Field(default_factory=GuardrailTrace)
     timings_ms: dict[str, float] = Field(default_factory=dict)
     degradations: list[str] = Field(default_factory=list)
+    transcript: Transcript | None = None  # populated only for voice-originated (/listen) requests

@@ -23,6 +23,9 @@ dependencies = [
     # text/lang utilities
     "regex>=2024.7.24",
     "langdetect>=1.0.9",
+    # LLM / embedding (NVIDIA NIM, OpenAI-compatible)
+    "openai>=1.40",
+    "python-multipart>=0.0.9",
 ]
 
 [project.optional-dependencies]
@@ -30,6 +33,7 @@ dev = [
     "pytest>=8.3",
     "pytest-asyncio>=0.24",
     "ruff>=0.6",
+    "respx>=0.21",
 ]
 
 [tool.uv]
@@ -42,3 +46,4 @@ target-version = "py312"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["api", "ingest", "bench"]
+pythonpath = ["."]

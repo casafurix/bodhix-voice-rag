@@ -1,5 +1,10 @@
 # 10 — Deployment
 
+> **Scope note:** this page is the original 3-person-team plan (Fly.io + Vercel, paid, India-region
+> tuned) — kept for its design thinking, not followed literally. What's actually deployed is a free
+> Hugging Face Spaces Docker container; see the "Deploying" section in [README.md](../README.md) and
+> `Dockerfile`. No frontend yet, so the Vercel/Next.js half below doesn't apply.
+
 The brief requires a **live working link**. A judge will click it, probably once, possibly at 11 pm
 on the deadline. It has to work cold, on a phone, on mobile data.
 

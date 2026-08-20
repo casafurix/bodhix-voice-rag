@@ -1,16 +1,20 @@
-"""FastAPI app — POST /ask (text, for benchmarking/debugging), GET /healthz.
+"""FastAPI app — POST /ask (text), POST /listen (voice), GET /healthz.
 See docs/01-architecture.md, "Interfaces".
 
-WS /listen (the voice path) is added once api/stt/sarvam.py + the frontend
-are both ready to be wired together — see the todo list / roadmap.
+/listen is a batch HTTP multipart endpoint (upload a complete audio clip),
+not a WebSocket — voice input is speak-then-process, not live streaming.
+See docs/13-build-status.md and api/harness/pipeline_voice.py.
 """
 
 from __future__ import annotations
 
-from fastapi import FastAPI
+from typing import Literal
+
+from fastapi import FastAPI, Form, UploadFile
 
 from api.config import settings
 from api.harness.pipeline import run_ask
+from api.harness.pipeline_voice import run_ask_voice
 from api.schemas import AskRequest, AskResponse
 
 app = FastAPI(title="BodhiX Voice RAG API")
@@ -26,3 +30,19 @@ async def healthz() -> dict:
 @app.post("/ask", response_model=AskResponse)
 async def ask(request: AskRequest) -> AskResponse:
     return await run_ask(request)
+
+
+@app.post("/listen", response_model=AskResponse)
+async def listen(
+    audio: UploadFile,
+    lang_hint: str | None = Form(None),
+    budget_ms: float | None = Form(None),
+    answer_mode: Literal["extractive", "abstractive"] = Form("abstractive"),
+) -> AskResponse:
+    audio_bytes = await audio.read()
+    return await run_ask_voice(
+        audio=audio_bytes,
+        lang_hint=lang_hint,
+        budget_ms=budget_ms or settings.voice_default_budget_ms,
+        answer_mode=answer_mode,
+    )
