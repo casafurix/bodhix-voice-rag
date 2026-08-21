@@ -96,6 +96,40 @@ shape," not "tested against real data," until the ingest pipeline landed.
 
 ---
 
+## External eval: rag-local-eval-loop (organizer-provided)
+
+Wired per `wiring-in-the-eval-loop.pdf` — `app/embedder.py` and
+`app/generator.py` at the repo root are thin adapters onto the REAL
+production code (`api/retrieval/embed.py`'s MiniLM model, the calibrated
+`api/guardrails/coverage_gate.py`, `api/answer/extractive.py`'s span
+picker), so this suite grades exactly what a plain-text `POST /ask`
+request would do — not a reimplementation. Extractive only (not
+abstractive): the suite calls `generate_answer()` once per sampled example
+across `--workers` threads, and the NVIDIA abstractive path takes 8-25s
+per call by its own docstring's measurement — impractical to run at any
+real sample size. Full report: `bench/results/eval_loop_report.json`
+(`--num-answerable 25 --num-unanswerable 25`, seed 42, Anthropic judge).
+
+| Check | Result | Read |
+|---|---|---|
+| Retrieval | Recall@1 0.48, Recall@5 0.88, MRR 0.61 | Real MiniLM quality against the suite's own throwaway FAISS index — informative on the embedding model alone, not our full hybrid pipeline (see the suite's own scope note) |
+| Faithfulness | 98% faithful, 2% hallucination, 96.9% self-report precision | When we answer, it's honest — extractive-by-construction pays off here |
+| Correctness | 24% match MSMARCO's exact reference answer | Expected gap, not a bug: extractive picks a real sentence from a real candidate, not a reworded match to MSMARCO's curated phrasing. Some misses are retrieval misses (`top_k=5` didn't surface the right candidate), not extraction failures |
+| Reliability | False refusal 16%, **false confidence 44%** | Real finding: the coverage gate's TAU thresholds (calibrated on our own OOD-vs-in-domain query set, `bench/run_guardrails_calibration.py`) don't cleanly separate MSMARCO's specific "near-miss, not-selected" candidates — a harder negative than the "fully off-topic question" case `/ask` mostly faces in practice |
+| Latency | embed p95 40.9ms (PASS vs 50ms), generation p95 475ms (PASS vs 1500ms) | Consistent with `bench/run_retrieval_latency.py`'s numbers |
+
+**Tried and reverted:** raised `TAU_ABSOLUTE`/`TAU_MEAN` (0.70/0.62 →
+0.78/0.70) to test the false-confidence gap. Result: false confidence
+0.44→0.16, but false refusal 0.16→0.48 — a straight tradeoff, not an
+improvement (combined error rate got slightly worse, 0.60→0.64). Kept the
+original values, which are calibrated against our own corpus's actual
+traffic shape; recalibrating against this specific harness's harder
+negatives risks overfitting to one eval tool at the expense of the
+real corpus. Flagged here as a known, measured gap rather than
+silently tuned away.
+
+---
+
 ## Next up, in priority order
 
 1. Scale ingest past 30 rows/language (corpus expansion for demo coverage)

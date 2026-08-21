@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "target_root": "A:\\github-profiles\\personal\\hackathons\\bodhix-voice-rag",
+    "generation_backend": "unknown",
+    "generation_model_hint": "bodhix-extractive-lexical-overlap",
+    "language": "hin",
+    "split": "validation",
+    "num_answerable": 25,
+    "num_unanswerable": 25,
+    "num_examples": 50,
+    "num_chunks": 1166,
+    "top_k": 5,
+    "seed": 42,
+    "num_errored": 0
+  },
+  "retrieval": {
+    "check": "retrieval (reference-based)",
+    "num_evaluated": 25,
+    "top_k": 5,
+    "cross_lingual": {
+      "recall_at_k": {
+        "1": 0.48,
+        "3": 0.76,
+        "5": 0.88
+      },
+      "mrr": 0.6127
+    },
+    "same_language": {
+      "recall_at_k": {
+        "1": 0.48,
+        "3": 0.68,
+        "5": 0.84
+      },
+      "mrr": 0.594
+    }
+  },
+  "faithfulness": {
+    "check": "faithfulness / hallucination (reference-free, LLM-as-judge)",
+    "num_evaluated": 50,
+    "faithful_rate": 0.98,
+    "hallucination_rate": 0.02,
+    "num_confident_answers": 32,
+    "self_report_precision": 0.9688,
+    "self_report_disagreements": [
+      {
+        "query": "do migraine headaches cause one to lose their balance?",
+        "answer": "माइग्रेन सिरदर्द बिना मतली के हो सकता है और माइग्रेन से संबंधित चक्कर आना बिना मतली के भी हो सकता है।",
+        "judge_reason": "[judge output did not parse as expected JSON: '{\"verdict\": true, \"reason\": \"The']"
+      }
+    ],
+    "hallucinated_examples": [
+      {
+        "query": "do migraine headaches cause one to lose their balance?",
+        "answer": "माइग्रेन सिरदर्द बिना मतली के हो सकता है और माइग्रेन से संबंधित चक्कर आना बिना मतली के भी हो सकता है।",
+        "judge_reason": "[judge output did not parse as expected JSON: '{\"verdict\": true, \"reason\": \"The']"
+      }
+    ]
+  },
+  "correctness": {
+    "check": "correctness (reference-based, LLM-as-judge)",
+    "num_evaluated": 25,
+    "correct_rate": 0.24,
+    "incorrect_examples": [
+      {
+        "query": "how to find the surface area of a triangle",
+        "reference_answer": "To find the area of a triangle, multiply the base by the height, and then divide by 2. The division by 2 comes from the fact that a parallelogram can be divided into 2 triangles.",
+        "answer": "Solution: In this example, we are given the area of a triangle and one dimension, and we are asked to work backwards to find the other dimension.",
+        "judge_reason": "The answer does not state the area formula (base × height ÷ 2) and is an irrelevant fragment."
+      },
+      {
+        "query": "what is megatron called",
+        "reference_answer": "Megatron is the founder of the Decepticon uprising, and their most well-known and feared leader.",
+        "answer": "I couldn't find enough relevant information in my sources to answer that.",
+        "judge_reason": "The answer refuses to answer despite the information being available."
+      },
+      {
+        "query": "how old would dean martin be",
+        "reference_answer": "Dean Martin was 78 years old.",
+        "answer": "I couldn't find enough relevant information in my sources to answer that.",
+        "judge_reason": "The answer refuses to provide information, while the reference gives a specific age of 78."
+      },
+      {
+        "query": "can thinning vocal cords cause hoarseness",
+        "reference_answer": "Yes, thinning vocal cords cause hoarseness.",
+        "answer": "When something causes the surface of the vocal cords to become thickened or swollen, the vocal cords can no longer vibrate freely and hoarseness wil",
+        "judge_reason": "The answer addresses thickening/swelling of vocal cords rather than affirming that thinning vocal cords cause hoarseness."
+      },
+      {
+        "query": "what is the transpiration stream",
+        "reference_answer": "The flow of water through the xylem from the roots to the leaf, against gravity, is called the transpiration stream.",
+        "answer": "(3 marks transpiration stream evolving sciencesbiology revision questions module 2 the student roomdefinition of transpiration stream by medical transpiration youtube.",
+        "judge_reason": "The answer is incoherent text fragments and does not state that the transpiration stream is the flow of water through the xylem from roots to leaves."
+      }
+    ]
+  },
+  "reliability": {
+    "check": "reliability / \"lying factor\" (answerable-vs-answered 2x2)",
+    "num_answerable_evaluated": 25,
+    "num_unanswerable_evaluated": 25,
+    "false_refusal_rate": 0.16,
+    "false_refusal_examples": [
+      {
+        "query": "what is megatron called",
+        "expected_answer": "Megatron is the founder of the Decepticon uprising, and their most well-known and feared leader."
+      },
+      {
+        "query": "how old would dean martin be",
+        "expected_answer": "Dean Martin was 78 years old."
+      },
+      {
+        "query": "which plants live in the sonoran desert?",
+        "expected_answer": "The plants in the Sonoran desert are very interesting, such as fairy duster, jimson weed, tumble weed, night blooming cereus, devils claw, ghost flower, hedgehog cactus and showy four o clock."
+      },
+      {
+        "query": "what is chrome mean",
+        "expected_answer": "Chrome is a fast, simple, and secure web browser, built for the modern web."
+      }
+    ],
+    "false_confidence_rate": 0.44,
+    "false_confidence_examples": [
+      {
+        "query": "what is that cluster of stars near taurus",
+        "fabricated_answer": "Star clusters (or star clouds) are groups of stars."
+      },
+      {
+        "query": "the ant and the dove fable",
+        "fabricated_answer": "The Ant and the Dove."
+      },
+      {
+        "query": "how long does it take for government college loans to be issued",
+        "fabricated_answer": "ऋण स्वीकृति के बाद, ऋणदाता को ऋण की आय को कॉलेज या आपको भुगतान करने में 2 सप्ताह से 2 महीने का समय लग सकता है, जो लागू होता है।"
+      },
+      {
+        "query": "what is the astrolabe used for today?",
+        "fabricated_answer": "(We no longer offer The Personal Astrolabe, but most of this page is still available for your information and/or inspiration.) Details on the description, history, use, theory and design of all types "
+      },
+      {
+        "query": "how do cyber attacks happen",
+        "fabricated_answer": "Cyber attacks exploit network and system vulnerabilities: the attack typically follows a cyber kill chain methodology - covering everything from the reconnaissance stage to data exfiltration and DoS."
+      }
+    ]
+  },
+  "latency": {
+    "check": "latency",
+    "num_evaluated": 50,
+    "embed": {
+      "avg_ms": 25.96,
+      "p50_ms": 23.75,
+      "p95_ms": 39.82,
+      "p99_ms": 59.34
+    },
+    "search": {
+      "avg_ms": 0.44,
+      "p50_ms": 0.33,
+      "p95_ms": 1.17,
+      "p99_ms": 1.68
+    },
+    "retrieval_total": {
+      "avg_ms": 26.08,
+      "p50_ms": 24.05,
+      "p95_ms": 40.88,
+      "p99_ms": 44.06
+    },
+    "generation": {
+      "avg_ms": 404.43,
+      "p50_ms": 411.18,
+      "p95_ms": 474.99,
+      "p99_ms": 529.45
+    },
+    "retrieval_latency_budget_ms": 50,
+    "retrieval_within_budget": true,
+    "generation_latency_target_ms": 1500.0,
+    "generation_within_target": true
+  }
+}
