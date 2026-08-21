@@ -65,3 +65,7 @@ async def run_ask_voice(
         return response
     except StageShortCircuit as short_circuit:
         return build_refusal_response(ctx, short_circuit)
+    except Exception as exc:
+        return build_refusal_response(
+            ctx, StageShortCircuit("INTERNAL_ERROR", f"Voice transcription failed: {exc}")
+        )
