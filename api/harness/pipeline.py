@@ -175,12 +175,21 @@ async def run_retrieval_and_answer(
 
     fused = await timed(ctx, "fuse", _fuse())
 
-    # 6. coverage gate — may short-circuit. Runs on raw dense cosine scores
-    # (absolute coverage signal), NOT the fused RRF ranks below — RRF is
-    # rank-based and looks identical for covered and uncovered queries. See
-    # api/guardrails/coverage_gate.py for the calibration data.
+    # 6. coverage gate — may short-circuit. Always gates on LOCAL-model
+    # cosine scores: the calibration in bench/run_guardrails_calibration.py
+    # is per-embedding-space, and the NVIDIA nemotron space shows poor
+    # in/out-of-domain separation (in-min 0.248 vs out-max 0.270, measured)
+    # while MiniLM separates cleanly (0.817 / 0.600). On the local path the
+    # retrieve-stage scores already are local cosines; on the voice/NVIDIA
+    # path we re-score the transcript with the local model (~25ms extra).
     async def _coverage():
-        return coverage_verdict(dense_cosine_scores)
+        if vector_name == VECTOR_NAME:
+            return coverage_verdict(dense_cosine_scores)
+        local_vector = await asyncio.to_thread(embed_query, text)
+        _, local_scores = await asyncio.to_thread(
+            search_dense_grouped, local_vector, top_k, VECTOR_NAME
+        )
+        return coverage_verdict(local_scores)
 
     coverage_stats = await timed(ctx, "coverage_gate", _coverage())
 

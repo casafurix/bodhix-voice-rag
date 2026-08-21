@@ -24,6 +24,7 @@ from api.harness.pipeline import (
 )
 from api.harness.stage import StageShortCircuit, timed
 from api.schemas import AskResponse
+from api.stt.base import Transcript
 from api.stt.sarvam import SarvamProvider
 
 
@@ -36,6 +37,8 @@ async def run_ask_voice(
 ) -> AskResponse:
     deadline = Deadline(budget_ms=budget_ms)
     ctx = Context(deadline=deadline)
+
+    transcript: Transcript | None = None
 
     try:
         async def _stt():
@@ -64,8 +67,16 @@ async def run_ask_voice(
         response.transcript = transcript
         return response
     except StageShortCircuit as short_circuit:
-        return build_refusal_response(ctx, short_circuit)
+        response = build_refusal_response(ctx, short_circuit)
+        # Keep the transcript on refusals raised AFTER stt succeeded — the
+        # UI needs to show what the user actually said, refusal or not.
+        if transcript is not None:
+            response.transcript = transcript
+        return response
     except Exception as exc:
-        return build_refusal_response(
+        response = build_refusal_response(
             ctx, StageShortCircuit("INTERNAL_ERROR", f"Voice transcription failed: {exc}")
         )
+        if transcript is not None:
+            response.transcript = transcript
+        return response
