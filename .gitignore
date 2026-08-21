@@ -63,4 +63,5 @@ Thumbs.db
 .vscode/
 *.swp
 
-/frontend/
+/frontend/.env
+.env.*
