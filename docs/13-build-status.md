@@ -30,7 +30,7 @@ added on top of the brief*, not a graded requirement.
 | Embedding model | `intfloat/multilingual-e5-small` (384-dim, ONNX int8) | `paraphrase-multilingual-MiniLM-L12-v2` (384-dim) | The installed `fastembed` (0.8.0) doesn't bundle e5-small, only the 1024-dim `-large` variant. MiniLM is the doc's own documented fallback (`docs/04-retrieval.md`). Revisit via custom ONNX export if the ablation shows a real quality gap. |
 | Reranker | `jina-reranker-v2-base-multilingual`, gated | **Not built** | Real extra latency + a third ONNX model to tune; extractive answer uses lexical-overlap span scoring instead. The harness's "optional stage, skippable" architecture already accounts for this — rerank is stage 6, cut cleanly. |
 | Groundedness check | NLI entailment cross-encoder | **Lexical-overlap** | The doc's own documented fallback (`docs/07-guardrails.md`) when no NLI model is fast/available enough |
-| Answer path | Dual: extractive (fast) + abstractive (rich, LLM) | **Extractive only** | Satisfies "returns an answer"; grounded by construction; no LLM cost or latency in the loop |
+| Answer path | Dual: extractive (fast) + abstractive (rich, LLM) | **Both wired** — extractive default/fallback, abstractive via `options.answer_mode` (NVIDIA NIM) with automatic fallback to extractive on LLM failure or guard_out veto | The original "extractive only" cut held until the backend had an LLM client; the dual-path design from docs/08-latency.md is now real |
 | STT | Sarvam primary + ElevenLabs failover | **Sarvam only**, ElevenLabs interface stubbed, not wired | Brief says "pick one"; failover was demo-resilience insurance, not a requirement |
 | Speculative retrieval, `/diagnose`, semantic cache | Planned stretch features | **Not built** | Per the plan's own descoping order (`docs/11-roadmap.md`) |
 
@@ -41,12 +41,13 @@ added on top of the brief*, not a graded requirement.
 Not "written" — **run, with real data, and the output inspected by hand**:
 
 - `uv sync` installs cleanly; every module in `api/`, `ingest/`, `bench/` imports with no errors
-- `ingest/build_index.py` successfully streams real MSMARCO-XI data (`validation/hinval.parquet` + `validation/benval.parquet`), explodes + dedupes it, runs all 6 chunkers, embeds, and indexes into Qdrant (embedded mode) + BM25 — confirmed with a 30-rows-per-language run: **899 deduped passage docs → 8,197 chunks in ~88s**
-- `POST /ask` returns a real `ANSWERED` response with a correct, grounded citation for an English query ("what is a corporation") against the real ingested index
-- The same question **in Hindi** correctly retrieves the same underlying content cross-lingually (via the `s9_doc2query` strategy matching the dataset's own free question field) and returns a grounded **Hindi** answer — language consistency holds
-- `guard_in` correctly refuses on `UNSUPPORTED_LANGUAGE`, `INJECTION_DETECTED` (tested with a Bengali injection phrase)
-- `guard_out` correctly passes numeric grounding, citation integrity, extractive span verification, and lexical-overlap groundedness on a real answer
-- The harness correctly propagates a full per-stage timing trace (`timings_ms`) on every response, answered or refused
+- `ingest/load_cached_embeddings.py` populates Qdrant (embedded mode, both `dense` MiniLM and `dense_nvidia` vector fields) + BM25 from the committed parquet cache in ~60s, zero API calls
+- `POST /ask`: text query in → grounded extractive answer out, end-to-end in **~60ms warm** (inside the 200ms `t_core` budget); Hindi questions retrieve cross-lingually and return grounded answers
+- `POST /listen`: audio upload → Sarvam STT → same DAG, with transcript preserved on refusals so the UI shows what was actually said; language codes like `en-IN` normalise to `en`
+- Retrieval latency (the old #1 gap): FIXED. Six per-strategy filtered searches (~100-150ms each in qdrant local mode, ~600ms stage total) replaced by ONE unfiltered grouped search bucketed client-side. Bench n=200: **p50 34ms / p95 45ms**, PASS vs the 50ms sub-budget (`bench/run_retrieval_latency.py`)
+- Coverage gate: CALIBRATED with real data (`bench/run_guardrails_calibration.py`, 30 in-domain + 10 out-of-domain queries). Gates on raw cosine, not RRF ranks — RRF is rank-based and statistically identical for covered/uncovered queries, which is why off-topic questions used to get gibberish answers. Out-of-corpus questions now refuse cleanly with `OUT_OF_SCOPE`; thresholds are provider-aware (voice path always re-scores with the local model — the NVIDIA embedding space shows poor separation)
+- Guardrails verified live: `OUT_OF_SCOPE`, `UNSUPPORTED_LANGUAGE`, `INJECTION_DETECTED`, `NO_SPEECH`, plus numeric/citation/groundedness checks on the output side
+- Frontend: React NOVA app (`web-react/`) — hold-to-talk mic recording 16kHz WAV in-browser, conversation history, browser TTS, citations panel, human-readable refusal messages. Voice E2E through the UI verified by hand
 
 ## Known gaps — found by testing, not yet fixed
 
@@ -56,11 +57,10 @@ flattering interpretation.
 
 | Gap | Evidence | Status |
 |---|---|---|
-| Retrieval is far over its sub-budget | `bench/run_retrieval_latency.py`: embed ~4.7ms avg (on target), but embed+search **~285ms avg / ~480ms P95** vs. a 50ms sub-budget | The 6 strategy searches run **sequentially** in `harness/pipeline.py`, not concurrently as `docs/04-retrieval.md` specifies ("dense and sparse arms run concurrently... cost is max(), not sum()"). Fix identified, not yet applied. |
-| Coverage gate isn't reliably discriminative yet | A genuinely off-topic query ("what's the weather in Panaji") was incorrectly `ANSWERED` instead of refused | `TAU_*` thresholds in `coverage_gate.py` are a rescaled *placeholder* (fixed once already — see the bug-fix commit — for being on the wrong numeric scale entirely), not a real calibration. Needs `bench/run_guardrails.py` with real in-domain/out-of-domain query sets, which doesn't exist yet. At T0's tiny scale (899 docs) the RRF score distribution isn't very discriminative regardless. |
-| Corpus is tiny | 899 docs / 8,197 chunks, from 30 rows/language | Nowhere near T0 (50K chunks) target yet. `ROWS_PER_LANGUAGE` is a one-line change in `ingest/build_index.py`; not scaled up yet pending the concurrency fix (no point indexing more data into a retrieval path that's already 5-10x over budget). |
-| No `bench/` scripts beyond retrieval-latency | Only `run_retrieval_latency.py` exists | `queries.jsonl`, `run_latency.py` (full `/ask` P50/P70/P100), `run_retrieval.py` (Recall@k/nDCG/MRR ablation), `report.py` — none built yet |
-| No frontend | — | `web/` doesn't exist yet; backend-first per the agreed priority |
+| Corpus is tiny | 899 docs / 8,197 chunks, from 30 rows/language | Common-sense questions ("who is Lionel Messi") correctly REFUSE — the guardrail works — but topic coverage limits the demo. Scaling `ROWS_PER_LANGUAGE` up is queued; build is ~16 min at current size |
+| No full-pipeline benchmark | Only `bench/run_retrieval_latency.py` + `bench/run_guardrails_calibration.py` exist | `queries.jsonl`, `run_latency.py` (full `/ask` P50/P70/P100 over ≥300 queries), `run_retrieval.py` (Recall@k/nDCG/MRR chunking ablation), `report.py` — none built yet. These produce the graded tables/CSVs |
+| Not deployed | Local dev only | Dockerfile is Render-ready (verified locally with docker build/run); actual deploy pending |
+| Videos + promotion | — | Both videos and the 9 mandatory posts outstanding |
 
 ---
 
@@ -83,22 +83,24 @@ shape," not "tested against real data," until the ingest pipeline landed.
    as the fusion key instead of the payload's `chunk_id` — would have
    silently prevented dense/sparse hits for the same chunk from ever
    fusing correctly
-
-Full detail in the `fix(retrieval): three real bugs found by running the
-pipeline on real data` commit.
+5. The coverage gate could never discriminate on RRF scores even at the
+   right scale: fused scores are rank-based, so an uncovered query's
+   distribution looks identical to a covered one. Re-derived from data:
+   the gate now runs on raw cosine similarity with calibrated thresholds,
+   and the voice path always gates in the local embedding space (the
+   NVIDIA space's in/out-of-domain distributions overlap)
+6. Per-strategy filtered dense searches cost 100-150ms each in qdrant
+   embedded mode (payload filter forces a brute-force scan) — 6 of them
+   put the retrieve stage at ~600ms. One unfiltered grouped search +
+   client-side bucketing gives identical ranked lists at p50 34ms
 
 ---
 
 ## Next up, in priority order
 
-1. Fix `harness/pipeline.py`'s retrieve stage to search all 6 strategies
-   concurrently (asyncio, not a sequential `for` loop) — the single
-   biggest lever toward the 200ms `t_core` target
-2. Scale ingest past 30 rows/language once retrieval is fast enough that
-   more data doesn't just mean a slower-and-still-failing benchmark
-3. Build `bench/run_guardrails.py` with real in-domain/out-of-domain
-   query sets and actually calibrate the coverage-gate thresholds
-4. Build the remaining `bench/` scripts (`run_latency.py`,
-   `run_retrieval.py`, `report.py`) — this is where the graded
-   P50/P70/P100 numbers and the chunking ablation table come from
-5. `web/` frontend, once the backend numbers are real
+1. Scale ingest past 30 rows/language (corpus expansion for demo coverage)
+2. Build the remaining `bench/` scripts (`queries.jsonl`, `run_latency.py`,
+   `run_retrieval.py`, `report.py`) — the graded P50/P70/P100 numbers and
+   the chunking ablation table come from here
+3. Deploy backend to Render (live link requirement)
+4. Record both videos; publish the 9 promotion posts

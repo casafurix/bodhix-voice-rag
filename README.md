@@ -7,15 +7,15 @@ task, **Build a Voice-Enabled RAG Model**.
 
 Task 1 (`Frame in Goa`) lives in a separate repository. This repo is Task 2 only.
 
-> **Status: building, backend-first.** The end-to-end pipeline runs against real data — a
-> text query goes in, retrieval + guardrails + an extractive answer come out, with citations
-> and a full timing trace. Team staffing changed since the original plan (`docs/11-roadmap.md`)
-> was written — one person is building this solo on a compressed timeline — so the shipped
-> scope is intentionally smaller than the original 3-person plan in `docs/00`-`12`. What's
-> actually done, what's cut and why, and what's next is tracked honestly and continuously in
+> **Status: end-to-end working — voice in, grounded answer out, with a UI.** The full pipeline runs
+> against real data: speak (or type) a query, get retrieval + guardrails + an answer with citations
+> and a per-stage timing trace. Retrieval is measured at p50 34ms / p95 45ms against its 50ms
+> sub-budget, the coverage gate is calibrated on real in/out-of-domain queries, and out-of-corpus
+> questions refuse cleanly with `OUT_OF_SCOPE` instead of guessing. The React frontend (`web-react/`)
+> does hold-to-talk voice, conversation history and TTS. What's actually done, what's cut and why,
+> and what's next is tracked honestly and continuously in
 > **[docs/13-build-status.md](docs/13-build-status.md)** — read that first if you want the real
-> picture rather than the original ambition. No frontend yet; that's next once the backend
-> numbers are real.
+> picture rather than the original ambition.
 
 ---
 
@@ -169,13 +169,13 @@ Design intent vs. what's actually running — full detail in
 | Layer | Designed | Actually running | Why the difference (if any) |
 |---|---|---|---|
 | Retrieval + harness | Python 3.12, FastAPI, Pydantic v2 | Same | — |
-| Frontend | Next.js on Vercel | Not built yet | Backend-first; text-in/text-out `/ask` is solid before UI work starts |
+| Frontend | Next.js on Vercel | React (Vite) NOVA app in `web-react/`, hold-to-talk voice | Backend-first meant the API contract froze before UI work started |
 | Vector DB | Qdrant, colocated with the API | Same, embedded/local mode | — |
 | Embeddings | `multilingual-e5-small`, ONNX int8, 384-d | `paraphrase-multilingual-MiniLM-L12-v2`, 384-d | Installed `fastembed` doesn't bundle e5-small; MiniLM is the doc's own documented fallback |
 | STT | Sarvam `saaras:v3` primary, ElevenLabs failover | Sarvam only; ElevenLabs interface stubbed, not wired | Brief says "pick one"; failover was resilience insurance, not a requirement |
 | Languages | 5 (en, hi, ta, bn, mr) | 3 (**en, hi, bn**) | Solo build — fewer languages the builder can personally verify |
 | Chunking strategies | 12 | 6 (S1, S2, S3, S5, S9, S10) | The plan's own pre-declared minimum-viable scope |
-| Region | Everything in `ap-south` / Mumbai | Not deployed yet | Local dev only so far |
+| Region | Everything in `ap-south` / Mumbai | Local dev; Render deploy pending | Dockerfile verified locally with docker build/run |
 
 ---
 
