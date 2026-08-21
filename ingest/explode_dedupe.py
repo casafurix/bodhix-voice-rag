@@ -34,7 +34,7 @@ import blake3
 
 from api.retrieval.chunkers.base import PassageDoc
 
-_SCRIPT_BY_LANG = {"hi": "Deva", "bn": "Beng", "en": "Latn"}
+_SCRIPT_BY_LANG = {"hi": "Deva", "bn": "Beng", "ta": "Taml", "mr": "Deva", "en": "Latn"}
 
 
 def _normalise_for_dedup(text: str, lang: str) -> str:

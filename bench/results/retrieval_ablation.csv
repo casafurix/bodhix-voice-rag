@@ -1,0 +1,9 @@
+arm,recall@10,ndcg@10,mrr
+ENSEMBLE_rrf,0.9091,0.2051,0.3209
+s10_crosslingual_twin,0.3818,0.1577,0.1774
+s1_fixed,0.4909,0.1639,0.2595
+s2_passage_native,0.4909,0.1639,0.2595
+s3_sentence_window,0.5091,0.2161,0.2588
+s5_parent_child <- champion,0.6000,0.2309,0.2715
+s9_doc2query,0.9455,0.1861,0.3207
+sparse_bm25,0.9091,0.1890,0.3392

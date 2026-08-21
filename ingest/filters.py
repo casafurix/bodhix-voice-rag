@@ -22,6 +22,8 @@ MIN_SCRIPT_PURITY = 0.6  # fraction of alphabetic chars that must match the expe
 _SCRIPT_RANGES: dict[str, list[tuple[int, int]]] = {
     "hi": [(0x0900, 0x097F)],  # Devanagari
     "bn": [(0x0980, 0x09FF)],  # Bengali
+    "ta": [(0x0B80, 0x0BFF)],  # Tamil
+    "mr": [(0x0A80, 0x0AFF)],  # Devanagari (Marathi)
     "en": [(0x0041, 0x005A), (0x0061, 0x007A)],  # Latin A-Z / a-z
 }
 

@@ -35,7 +35,7 @@ class Settings(BaseSettings):
 
     # harness
     default_budget_ms: float = 200.0
-    languages: str = "en,hi,bn"
+    languages: str = "en,hi,bn,ta,mr"
 
     # api
     api_host: str = "0.0.0.0"
