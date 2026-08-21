@@ -39,6 +39,9 @@ dev = [
 [tool.uv]
 package = false
 
+[tool.setuptools.packages.find]
+include = ["api*", "bench*", "ingest*"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
