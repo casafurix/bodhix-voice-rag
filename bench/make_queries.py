@@ -110,7 +110,6 @@ def main() -> None:
                 "qid": f"ood-{i}",
                 "lang": ood["lang"],
                 "query": ood["query"],
-                "eng_query": None,
                 "relevant_prefixes": [],
                 "n_selected": 0,
                 "domain": "out",

@@ -60,7 +60,7 @@ def main() -> None:
             f"- **Degradation rate:** {over}/{len(core)} ({100 * over / max(len(core), 1):.1f}%) over budget",
             f"- Answered: {answered} · refused out-of-domain (correct): {refused_out} · "
             f"over-refused in-domain: {refused_in}",
-            f"- Over-refusal rate: {100 * refused_in / max(refused_in + len(answered), 1):.1f}% of in-domain queries",
+            f"- Over-refusal rate: {100 * refused_in / max(refused_in + answered, 1):.1f}% of in-domain queries",
             "",
         ]
 

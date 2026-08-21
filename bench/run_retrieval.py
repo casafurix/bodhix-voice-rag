@@ -37,6 +37,14 @@ RESULTS = Path("bench/results")
 TOP_K = 10
 
 
+def _doc_id(chunk_id: str) -> str:
+    """chunk_id = f'{lang}/{query_id}/p{i}/{strategy}/c{n}' -- doc_id is
+    always exactly the first 3 segments, regardless of strategy name (which
+    can itself contain no reliable separator to split on -- confirmed on
+    real data, e.g. 'en/166290/p9/s3_sentence_window/c0')."""
+    return "/".join(chunk_id.split("/")[:3])
+
+
 def percentile(values: list[float], pct: float) -> float:
     values = sorted(values)
     k = (len(values) - 1) * (pct / 100)
@@ -58,7 +66,7 @@ def load_relevance() -> list[dict]:
     while True:
         points, offset = client.scroll(
             COLLECTION_NAME, limit=500, offset=offset,
-            with_payload=["doc_id", "chunk_id"], with_vectors=False,
+            with_payload=["doc_id", "chunk_id", "is_selected"], with_vectors=False,
         )
         for p in points:
             payload = p.payload or {}
@@ -69,7 +77,7 @@ def load_relevance() -> list[dict]:
     # chunk_id = f"{doc_id}/cN"; doc_id = f"{lang}/{query_id}/p{i}"
     query_relevant: dict[str, set[str]] = defaultdict(set)
     for chunk_id, sel in selected.items():
-        doc_id = chunk_id.rsplit("/c", 1)[0]
+        doc_id = _doc_id(chunk_id)
         lang, qid = doc_id.split("/")[:2]
         if sel:
             query_relevant[qid].add(doc_id)
@@ -92,7 +100,7 @@ def evaluate(ranked_doc_lists: dict[str, dict[str, list[str]]], queries: list[di
     for arm in ranked_doc_lists:
         recalls, ndcgs, mrrs = [], [], []
         for q in queries:
-            ranked = ranked_doc_lists[arm][q["key"]]
+            ranked = ranked_doc_lists[arm].get(q["key"], [])
             relevant = q["relevant"]
             hits = [(i + 1, d) for i, d in enumerate(ranked[:TOP_K]) if d in relevant]
 
@@ -154,11 +162,11 @@ def main() -> None:
     ranked_docs: dict[str, dict[str, list[str]]] = {}
     for arm, per_query in arms.items():
         ranked_docs[arm] = {
-            key: [c.chunk_id.rsplit("/c", 1)[0] for c in chunks]
+            key: [_doc_id(c.chunk_id) for c in chunks]
             for key, chunks in per_query.items()
         }
     ranked_docs["ENSEMBLE_rrf"] = {
-        key: [c.chunk_id.rsplit("/c", 1)[0] for c in chunks]
+        key: [_doc_id(c.chunk_id) for c in chunks]
         for key, chunks in ensemble.items()
     }
 

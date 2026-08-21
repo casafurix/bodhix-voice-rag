@@ -53,23 +53,23 @@
 {"qid": "116898", "lang": "mr", "query": "व्याख्या मनमानीपणे", "relevant_prefixes": ["en/116898/", "mr/116898/"], "n_selected": 2, "domain": "in"}
 {"qid": "1060361", "lang": "mr", "query": "बार्टर प्रणाली आणि तिच्या समस्या काय आहेत", "relevant_prefixes": ["en/1060361/", "mr/1060361/"], "n_selected": 4, "domain": "in"}
 {"qid": "1090353", "lang": "mr", "query": "हवामानाचा अभ्यास", "relevant_prefixes": ["en/1090353/", "mr/1090353/"], "n_selected": 2, "domain": "in"}
-{"qid": "ood-0", "lang": "en", "query": "what is the capital of India", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-1", "lang": "en", "query": "how do I bake a chocolate cake", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-2", "lang": "en", "query": "who won the football world cup final", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-3", "lang": "en", "query": "what is the boiling point of water", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-4", "lang": "en", "query": "best restaurants in Paris", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-5", "lang": "hi", "query": "भारत की राजधानी क्या है", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-6", "lang": "hi", "query": "चॉकलेट केक कैसे बनाते हैं", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-7", "lang": "hi", "query": "फुटबॉल विश्व कप किसने जीता", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-8", "lang": "bn", "query": "ভারতের রাজধানী কী", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-9", "lang": "bn", "query": "চকলেট কেক কীভাবে বানায়", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-10", "lang": "ta", "query": "இந்தியாவின் தலைநகர் எது", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-11", "lang": "ta", "query": "சாக்லேட் கேக் எப்படி செய்வது", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-12", "lang": "mr", "query": "भारताची राजधानी काय आहे", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-13", "lang": "mr", "query": "चॉकलेट केक कसा बनवायचा", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-14", "lang": "en", "query": "how to learn japanese quickly", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-15", "lang": "en", "query": "what causes earthquakes", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-16", "lang": "en", "query": "symptoms of vitamin d deficiency", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-17", "lang": "hi", "query": "स्टॉक मार्केट में निवेश कैसे करें", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-18", "lang": "bn", "query": "ভূমিকম্প কেন হয়", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
-{"qid": "ood-19", "lang": "ta", "query": "புகைப்படம் எடுப்பது எப்படி", "eng_query": null, "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-0", "lang": "en", "query": "what is the capital of India", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-1", "lang": "en", "query": "how do I bake a chocolate cake", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-2", "lang": "en", "query": "who won the football world cup final", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-3", "lang": "en", "query": "what is the boiling point of water", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-4", "lang": "en", "query": "best restaurants in Paris", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-5", "lang": "hi", "query": "भारत की राजधानी क्या है", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-6", "lang": "hi", "query": "चॉकलेट केक कैसे बनाते हैं", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-7", "lang": "hi", "query": "फुटबॉल विश्व कप किसने जीता", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-8", "lang": "bn", "query": "ভারতের রাজধানী কী", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-9", "lang": "bn", "query": "চকলেট কেক কীভাবে বানায়", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-10", "lang": "ta", "query": "இந்தியாவின் தலைநகர் எது", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-11", "lang": "ta", "query": "சாக்லேட் கேக் எப்படி செய்வது", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-12", "lang": "mr", "query": "भारताची राजधानी काय आहे", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-13", "lang": "mr", "query": "चॉकलेट केक कसा बनवायचा", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-14", "lang": "en", "query": "how to learn japanese quickly", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-15", "lang": "en", "query": "what causes earthquakes", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-16", "lang": "en", "query": "symptoms of vitamin d deficiency", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-17", "lang": "hi", "query": "स्टॉक मार्केट में निवेश कैसे करें", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-18", "lang": "bn", "query": "ভূমিকম্প কেন হয়", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}
+{"qid": "ood-19", "lang": "ta", "query": "புகைப்படம் எடுப்பது எப்படி", "relevant_prefixes": [], "n_selected": 0, "domain": "out"}

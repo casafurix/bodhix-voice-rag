@@ -1,0 +1,321 @@
+qid,lang,query,domain,rep,verdict,refusal_code,wall_ms,t_core_ms,mode
+1102432,hi,कॉर्पोरेशन क्या है?,in,0,ANSWERED,,5987.95,5975.83,extractive
+1102432,en,. what is a corporation?,in,0,ANSWERED,,48.2,45.51,extractive
+1102431,hi,रेचल कार्सन ने क्यों एक दायित्व बर्दाश्त करने के लिए लिखा,in,0,ANSWERED,,50.48,48.28,extractive
+1102431,en,why did rachel carson write an obligation to endure,in,0,ANSWERED,,54.06,51.94,extractive
+205107,hi,ईमानदारी या सच्चाई की परिभाषा,in,0,ANSWERED,,52.08,49.48,extractive
+205107,en,honesty or integrity definition,in,0,ANSWERED,,53.05,50.36,extractive
+300122,hi,फ्रैंक गिफोर्ड ने कितनी महिलाओं से शादी की,in,0,ANSWERED,,44.36,42.13,extractive
+300122,en,how many women did frank gifford marry,in,0,ANSWERED,,53.47,51.25,extractive
+233826,hi,बाज़ कितनी तेजी से यात्रा करता है,in,0,ANSWERED,,45.96,43.83,extractive
+233826,en,how fast does an eagle travel,in,0,ANSWERED,,49.27,46.86,extractive
+1090355,hi,स्टबहब टोल फ्री नंबर,in,0,ANSWERED,,45.53,43.03,extractive
+1090355,en,stubhub toll free number,in,0,ANSWERED,,45.3,42.83,extractive
+165349,hi,क्या डेल्टा बैंगलोर के लिए उड़ान भरता है?,in,0,ANSWERED,,44.68,42.59,extractive
+165349,en,does delta fly to bangalore,in,0,ANSWERED,,54.42,52.08,extractive
+260880,hi,कैंटालूप को कितने समय तक परिपक्व होना है,in,0,ANSWERED,,48.1,45.49,extractive
+260880,en,how long for cantaloupe to mature,in,0,ANSWERED,,44.69,42.45,extractive
+116898,hi,परिभाषा मनमानी है,in,0,ANSWERED,,46.5,44.03,extractive
+116898,en,defination arbitrary,in,0,ANSWERED,,55.8,53.42,extractive
+1060361,hi,किन्ना पारस्परिक आदान-प्रदान होता है और इसकी समस्याएं क्या हैं,in,0,ANSWERED,,49.19,46.9,extractive
+1060361,en,what is barter system and its problems,in,0,ANSWERED,,46.68,44.25,extractive
+1090353,hi,जलवायु मौसम का अध्ययन,in,0,ANSWERED,,45.61,43.5,extractive
+1090353,en,study of climate weather,in,0,ANSWERED,,45.49,43.26,extractive
+1102432,bn,কর্পোরেশন কী?,in,0,ANSWERED,,44.58,42.16,extractive
+1102431,bn,র‍্যাচেল কারসন কেন একটি বাধ্যবাধকতা সহ্য করার জন্য লিখেছিলেন,in,0,ANSWERED,,44.42,41.64,extractive
+205107,bn,সততা বা সততার সংজ্ঞা,in,0,ANSWERED,,39.84,37.48,extractive
+300122,bn,ফ্র্যাঙ্ক গিফোর্ড কতজন মহিলাকে বিয়ে করেছিলেন,in,0,ANSWERED,,42.11,39.67,extractive
+233826,bn,একটি ঈগল কত দ্রুত ভ্রমণ করে।,in,0,ANSWERED,,42.33,39.81,extractive
+1090355,bn,স্টাবহাব টোল ফ্রি নম্বর,in,0,ANSWERED,,40.68,38.53,extractive
+165349,bn,ডুবলুমধ্য বাঁক বাঁগালোরে উড়ে যায়,in,0,ANSWERED,,43.19,40.91,extractive
+260880,bn,কতদিন করে ক্যান্টালুপ পাকাবে।,in,0,ANSWERED,,41.86,39.2,extractive
+116898,bn,সংজ্ঞা নির্ধারণ নির্বিচারে,in,0,ANSWERED,,39.72,37.44,extractive
+1060361,bn,বার্টার সিস্টেম এবং এর সমস্যা কী,in,0,ANSWERED,,41.62,39.44,extractive
+1090353,bn,জলবায়ু আবহাওয়ার অধ্যয়ন,in,0,ANSWERED,,40.94,38.64,extractive
+1102432,ta,ஒரு நிறுவனம் என்பது என்ன?,in,0,ANSWERED,,40.92,38.7,extractive
+1102431,ta,ஏன் ரேச்சல் கார்சன் ஒரு கடமையை நிறைவேற்ற வேண்டும் என்று எழுதினார்,in,0,ANSWERED,,43.39,40.96,extractive
+205107,ta,நேர்மை அல்லது நேர்மையின் வரையறை,in,0,ANSWERED,,39.69,37.43,extractive
+300122,ta,ஃபிராங்க் கிஃபோர்டு எத்தனை பெண்களை திருமணம் செய்து கொண்டார்,in,0,ANSWERED,,42.69,40.57,extractive
+233826,ta,கழுகு எவ்வளவு வேகமாக பயணிக்கிறது?,in,0,ANSWERED,,45.51,43.04,extractive
+1090355,ta,ஸ்டப்ஹப் டோல் இலவச எண்,in,0,ANSWERED,,44.05,41.89,extractive
+165349,ta,டெல்டா பெங்களூருக்கு செல்கிறதா?,in,0,ANSWERED,,47.17,44.79,extractive
+260880,ta,கருவைக்கூடைகள் முதிர்ச்சியடைய எவ்வளவு காலம் ஆகும்,in,0,ANSWERED,,46.88,44.61,extractive
+116898,ta,வரையறை நிர்ணயம் தன்னிச்சையாக,in,0,REFUSED,UNGROUNDED_ANSWER,40.7,38.37,
+1060361,ta,பர்ட்டர் அமைப்பு என்றால் என்ன மற்றும் அதன் பிரச்சனைகள் என்ன?,in,0,ANSWERED,,42.16,39.4,extractive
+1090353,ta,பருவநிலை வானிலை ஆய்வு,in,0,ANSWERED,,43.34,40.88,extractive
+1102432,mr,कॉर्पोरेशन म्हणजे काय?,in,0,ANSWERED,,46.02,43.58,extractive
+1102431,mr,रॅचेल कार्सनला काय करावे लागले असे लिहिले गेले का?,in,0,ANSWERED,,44.45,42.0,extractive
+205107,mr,प्रामाणिकपणा किंवा सचोटीची व्याख्या,in,0,ANSWERED,,41.74,39.59,extractive
+300122,mr,फ्रँक गिफर्डने किती स्त्रियांशी लग्न केले,in,0,ANSWERED,,48.92,46.78,extractive
+233826,mr,गरुड किती वेगाने प्रवास करतो,in,0,ANSWERED,,46.24,44.06,extractive
+1090355,mr,स्टबहब टोल फ्री नंबर,in,0,ANSWERED,,43.96,41.77,extractive
+165349,mr,ते डेल्टा बंगलोरला जाते का?,in,0,REFUSED,OUT_OF_SCOPE,41.12,38.98,
+260880,mr,कॅन्टालूप किती काळ परिपक्व होईल,in,0,ANSWERED,,67.13,63.46,extractive
+116898,mr,व्याख्या मनमानीपणे,in,0,ANSWERED,,60.73,57.81,extractive
+1060361,mr,बार्टर प्रणाली आणि तिच्या समस्या काय आहेत,in,0,ANSWERED,,40.98,38.66,extractive
+1090353,mr,हवामानाचा अभ्यास,in,0,ANSWERED,,42.45,40.24,extractive
+1102432,hi,कॉर्पोरेशन क्या है?,in,1,ANSWERED,,43.03,40.74,extractive
+1102432,en,. what is a corporation?,in,1,ANSWERED,,42.73,40.2,extractive
+1102431,hi,रेचल कार्सन ने क्यों एक दायित्व बर्दाश्त करने के लिए लिखा,in,1,ANSWERED,,45.32,42.67,extractive
+1102431,en,why did rachel carson write an obligation to endure,in,1,ANSWERED,,48.19,45.17,extractive
+205107,hi,ईमानदारी या सच्चाई की परिभाषा,in,1,ANSWERED,,49.58,47.18,extractive
+205107,en,honesty or integrity definition,in,1,ANSWERED,,44.42,42.33,extractive
+300122,hi,फ्रैंक गिफोर्ड ने कितनी महिलाओं से शादी की,in,1,ANSWERED,,41.38,39.18,extractive
+300122,en,how many women did frank gifford marry,in,1,ANSWERED,,52.32,50.22,extractive
+233826,hi,बाज़ कितनी तेजी से यात्रा करता है,in,1,ANSWERED,,42.65,40.01,extractive
+233826,en,how fast does an eagle travel,in,1,ANSWERED,,49.52,46.85,extractive
+1090355,hi,स्टबहब टोल फ्री नंबर,in,1,ANSWERED,,42.86,40.38,extractive
+1090355,en,stubhub toll free number,in,1,ANSWERED,,44.62,42.24,extractive
+165349,hi,क्या डेल्टा बैंगलोर के लिए उड़ान भरता है?,in,1,ANSWERED,,44.36,42.16,extractive
+165349,en,does delta fly to bangalore,in,1,ANSWERED,,44.4,41.96,extractive
+260880,hi,कैंटालूप को कितने समय तक परिपक्व होना है,in,1,ANSWERED,,42.59,40.56,extractive
+260880,en,how long for cantaloupe to mature,in,1,ANSWERED,,42.91,40.32,extractive
+116898,hi,परिभाषा मनमानी है,in,1,ANSWERED,,41.76,39.28,extractive
+116898,en,defination arbitrary,in,1,ANSWERED,,49.83,47.34,extractive
+1060361,hi,किन्ना पारस्परिक आदान-प्रदान होता है और इसकी समस्याएं क्या हैं,in,1,ANSWERED,,45.11,42.92,extractive
+1060361,en,what is barter system and its problems,in,1,ANSWERED,,42.15,39.75,extractive
+1090353,hi,जलवायु मौसम का अध्ययन,in,1,ANSWERED,,45.74,43.48,extractive
+1090353,en,study of climate weather,in,1,ANSWERED,,44.26,42.15,extractive
+1102432,bn,কর্পোরেশন কী?,in,1,ANSWERED,,42.43,40.09,extractive
+1102431,bn,র‍্যাচেল কারসন কেন একটি বাধ্যবাধকতা সহ্য করার জন্য লিখেছিলেন,in,1,ANSWERED,,42.09,39.84,extractive
+205107,bn,সততা বা সততার সংজ্ঞা,in,1,ANSWERED,,168.01,165.97,extractive
+300122,bn,ফ্র্যাঙ্ক গিফোর্ড কতজন মহিলাকে বিয়ে করেছিলেন,in,1,ANSWERED,,39.39,37.08,extractive
+233826,bn,একটি ঈগল কত দ্রুত ভ্রমণ করে।,in,1,ANSWERED,,43.83,41.36,extractive
+1090355,bn,স্টাবহাব টোল ফ্রি নম্বর,in,1,ANSWERED,,44.65,42.53,extractive
+165349,bn,ডুবলুমধ্য বাঁক বাঁগালোরে উড়ে যায়,in,1,ANSWERED,,43.01,40.87,extractive
+260880,bn,কতদিন করে ক্যান্টালুপ পাকাবে।,in,1,ANSWERED,,42.23,39.89,extractive
+116898,bn,সংজ্ঞা নির্ধারণ নির্বিচারে,in,1,ANSWERED,,47.61,45.27,extractive
+1060361,bn,বার্টার সিস্টেম এবং এর সমস্যা কী,in,1,ANSWERED,,42.97,40.6,extractive
+1090353,bn,জলবায়ু আবহাওয়ার অধ্যয়ন,in,1,ANSWERED,,44.19,41.75,extractive
+1102432,ta,ஒரு நிறுவனம் என்பது என்ன?,in,1,ANSWERED,,42.62,40.24,extractive
+1102431,ta,ஏன் ரேச்சல் கார்சன் ஒரு கடமையை நிறைவேற்ற வேண்டும் என்று எழுதினார்,in,1,ANSWERED,,42.85,40.32,extractive
+205107,ta,நேர்மை அல்லது நேர்மையின் வரையறை,in,1,ANSWERED,,45.28,42.87,extractive
+300122,ta,ஃபிராங்க் கிஃபோர்டு எத்தனை பெண்களை திருமணம் செய்து கொண்டார்,in,1,ANSWERED,,40.5,38.08,extractive
+233826,ta,கழுகு எவ்வளவு வேகமாக பயணிக்கிறது?,in,1,ANSWERED,,39.5,36.86,extractive
+1090355,ta,ஸ்டப்ஹப் டோல் இலவச எண்,in,1,ANSWERED,,42.5,40.37,extractive
+165349,ta,டெல்டா பெங்களூருக்கு செல்கிறதா?,in,1,ANSWERED,,40.02,37.85,extractive
+260880,ta,கருவைக்கூடைகள் முதிர்ச்சியடைய எவ்வளவு காலம் ஆகும்,in,1,ANSWERED,,42.31,39.85,extractive
+116898,ta,வரையறை நிர்ணயம் தன்னிச்சையாக,in,1,REFUSED,UNGROUNDED_ANSWER,39.86,37.58,
+1060361,ta,பர்ட்டர் அமைப்பு என்றால் என்ன மற்றும் அதன் பிரச்சனைகள் என்ன?,in,1,ANSWERED,,41.86,39.69,extractive
+1090353,ta,பருவநிலை வானிலை ஆய்வு,in,1,ANSWERED,,39.81,37.26,extractive
+1102432,mr,कॉर्पोरेशन म्हणजे काय?,in,1,ANSWERED,,42.94,40.49,extractive
+1102431,mr,रॅचेल कार्सनला काय करावे लागले असे लिहिले गेले का?,in,1,ANSWERED,,45.84,43.48,extractive
+205107,mr,प्रामाणिकपणा किंवा सचोटीची व्याख्या,in,1,ANSWERED,,42.18,40.04,extractive
+300122,mr,फ्रँक गिफर्डने किती स्त्रियांशी लग्न केले,in,1,ANSWERED,,54.24,51.44,extractive
+233826,mr,गरुड किती वेगाने प्रवास करतो,in,1,ANSWERED,,53.73,51.4,extractive
+1090355,mr,स्टबहब टोल फ्री नंबर,in,1,ANSWERED,,44.81,42.44,extractive
+165349,mr,ते डेल्टा बंगलोरला जाते का?,in,1,REFUSED,OUT_OF_SCOPE,49.81,47.07,
+260880,mr,कॅन्टालूप किती काळ परिपक्व होईल,in,1,ANSWERED,,49.47,46.36,extractive
+116898,mr,व्याख्या मनमानीपणे,in,1,ANSWERED,,43.15,40.54,extractive
+1060361,mr,बार्टर प्रणाली आणि तिच्या समस्या काय आहेत,in,1,ANSWERED,,46.94,44.59,extractive
+1090353,mr,हवामानाचा अभ्यास,in,1,ANSWERED,,40.38,38.16,extractive
+1102432,hi,कॉर्पोरेशन क्या है?,in,2,ANSWERED,,44.33,41.55,extractive
+1102432,en,. what is a corporation?,in,2,ANSWERED,,42.89,40.47,extractive
+1102431,hi,रेचल कार्सन ने क्यों एक दायित्व बर्दाश्त करने के लिए लिखा,in,2,ANSWERED,,66.25,63.46,extractive
+1102431,en,why did rachel carson write an obligation to endure,in,2,ANSWERED,,53.62,51.47,extractive
+205107,hi,ईमानदारी या सच्चाई की परिभाषा,in,2,ANSWERED,,47.24,45.11,extractive
+205107,en,honesty or integrity definition,in,2,ANSWERED,,46.86,44.68,extractive
+300122,hi,फ्रैंक गिफोर्ड ने कितनी महिलाओं से शादी की,in,2,ANSWERED,,41.37,38.34,extractive
+300122,en,how many women did frank gifford marry,in,2,ANSWERED,,47.71,45.21,extractive
+233826,hi,बाज़ कितनी तेजी से यात्रा करता है,in,2,ANSWERED,,42.8,40.57,extractive
+233826,en,how fast does an eagle travel,in,2,ANSWERED,,46.68,44.28,extractive
+1090355,hi,स्टबहब टोल फ्री नंबर,in,2,ANSWERED,,45.2,42.84,extractive
+1090355,en,stubhub toll free number,in,2,ANSWERED,,45.09,42.58,extractive
+165349,hi,क्या डेल्टा बैंगलोर के लिए उड़ान भरता है?,in,2,ANSWERED,,42.95,40.44,extractive
+165349,en,does delta fly to bangalore,in,2,ANSWERED,,44.77,42.66,extractive
+260880,hi,कैंटालूप को कितने समय तक परिपक्व होना है,in,2,ANSWERED,,41.02,38.72,extractive
+260880,en,how long for cantaloupe to mature,in,2,ANSWERED,,43.02,40.74,extractive
+116898,hi,परिभाषा मनमानी है,in,2,ANSWERED,,39.45,37.15,extractive
+116898,en,defination arbitrary,in,2,ANSWERED,,62.24,59.94,extractive
+1060361,hi,किन्ना पारस्परिक आदान-प्रदान होता है और इसकी समस्याएं क्या हैं,in,2,ANSWERED,,44.89,42.55,extractive
+1060361,en,what is barter system and its problems,in,2,ANSWERED,,44.95,42.61,extractive
+1090353,hi,जलवायु मौसम का अध्ययन,in,2,ANSWERED,,43.32,41.11,extractive
+1090353,en,study of climate weather,in,2,ANSWERED,,45.55,43.17,extractive
+1102432,bn,কর্পোরেশন কী?,in,2,ANSWERED,,40.61,38.47,extractive
+1102431,bn,র‍্যাচেল কারসন কেন একটি বাধ্যবাধকতা সহ্য করার জন্য লিখেছিলেন,in,2,ANSWERED,,43.85,41.72,extractive
+205107,bn,সততা বা সততার সংজ্ঞা,in,2,ANSWERED,,41.3,39.12,extractive
+300122,bn,ফ্র্যাঙ্ক গিফোর্ড কতজন মহিলাকে বিয়ে করেছিলেন,in,2,ANSWERED,,41.43,39.15,extractive
+233826,bn,একটি ঈগল কত দ্রুত ভ্রমণ করে।,in,2,ANSWERED,,42.11,39.82,extractive
+1090355,bn,স্টাবহাব টোল ফ্রি নম্বর,in,2,ANSWERED,,45.35,42.58,extractive
+165349,bn,ডুবলুমধ্য বাঁক বাঁগালোরে উড়ে যায়,in,2,ANSWERED,,44.53,42.22,extractive
+260880,bn,কতদিন করে ক্যান্টালুপ পাকাবে।,in,2,ANSWERED,,45.17,42.81,extractive
+116898,bn,সংজ্ঞা নির্ধারণ নির্বিচারে,in,2,ANSWERED,,41.02,38.32,extractive
+1060361,bn,বার্টার সিস্টেম এবং এর সমস্যা কী,in,2,ANSWERED,,39.88,37.41,extractive
+1090353,bn,জলবায়ু আবহাওয়ার অধ্যয়ন,in,2,ANSWERED,,40.2,37.97,extractive
+1102432,ta,ஒரு நிறுவனம் என்பது என்ன?,in,2,ANSWERED,,41.04,38.94,extractive
+1102431,ta,ஏன் ரேச்சல் கார்சன் ஒரு கடமையை நிறைவேற்ற வேண்டும் என்று எழுதினார்,in,2,ANSWERED,,40.62,38.03,extractive
+205107,ta,நேர்மை அல்லது நேர்மையின் வரையறை,in,2,ANSWERED,,40.84,38.5,extractive
+300122,ta,ஃபிராங்க் கிஃபோர்டு எத்தனை பெண்களை திருமணம் செய்து கொண்டார்,in,2,ANSWERED,,43.99,41.79,extractive
+233826,ta,கழுகு எவ்வளவு வேகமாக பயணிக்கிறது?,in,2,ANSWERED,,40.53,38.11,extractive
+1090355,ta,ஸ்டப்ஹப் டோல் இலவச எண்,in,2,ANSWERED,,45.53,43.34,extractive
+165349,ta,டெல்டா பெங்களூருக்கு செல்கிறதா?,in,2,ANSWERED,,42.58,40.29,extractive
+260880,ta,கருவைக்கூடைகள் முதிர்ச்சியடைய எவ்வளவு காலம் ஆகும்,in,2,ANSWERED,,44.42,41.47,extractive
+116898,ta,வரையறை நிர்ணயம் தன்னிச்சையாக,in,2,REFUSED,UNGROUNDED_ANSWER,37.64,35.23,
+1060361,ta,பர்ட்டர் அமைப்பு என்றால் என்ன மற்றும் அதன் பிரச்சனைகள் என்ன?,in,2,ANSWERED,,42.09,40.06,extractive
+1090353,ta,பருவநிலை வானிலை ஆய்வு,in,2,ANSWERED,,45.68,42.49,extractive
+1102432,mr,कॉर्पोरेशन म्हणजे काय?,in,2,ANSWERED,,43.63,41.51,extractive
+1102431,mr,रॅचेल कार्सनला काय करावे लागले असे लिहिले गेले का?,in,2,ANSWERED,,46.03,43.9,extractive
+205107,mr,प्रामाणिकपणा किंवा सचोटीची व्याख्या,in,2,ANSWERED,,40.12,37.8,extractive
+300122,mr,फ्रँक गिफर्डने किती स्त्रियांशी लग्न केले,in,2,ANSWERED,,48.54,46.22,extractive
+233826,mr,गरुड किती वेगाने प्रवास करतो,in,2,ANSWERED,,47.36,45.01,extractive
+1090355,mr,स्टबहब टोल फ्री नंबर,in,2,ANSWERED,,42.56,40.41,extractive
+165349,mr,ते डेल्टा बंगलोरला जाते का?,in,2,REFUSED,OUT_OF_SCOPE,40.61,38.45,
+260880,mr,कॅन्टालूप किती काळ परिपक्व होईल,in,2,ANSWERED,,45.03,42.73,extractive
+116898,mr,व्याख्या मनमानीपणे,in,2,ANSWERED,,39.55,37.39,extractive
+1060361,mr,बार्टर प्रणाली आणि तिच्या समस्या काय आहेत,in,2,ANSWERED,,40.96,38.82,extractive
+1090353,mr,हवामानाचा अभ्यास,in,2,ANSWERED,,43.36,40.77,extractive
+1102432,hi,कॉर्पोरेशन क्या है?,in,3,ANSWERED,,41.9,39.75,extractive
+1102432,en,. what is a corporation?,in,3,ANSWERED,,41.8,39.46,extractive
+1102431,hi,रेचल कार्सन ने क्यों एक दायित्व बर्दाश्त करने के लिए लिखा,in,3,ANSWERED,,43.48,41.27,extractive
+1102431,en,why did rachel carson write an obligation to endure,in,3,ANSWERED,,45.64,43.53,extractive
+205107,hi,ईमानदारी या सच्चाई की परिभाषा,in,3,ANSWERED,,52.57,50.4,extractive
+205107,en,honesty or integrity definition,in,3,ANSWERED,,49.4,47.0,extractive
+300122,hi,फ्रैंक गिफोर्ड ने कितनी महिलाओं से शादी की,in,3,ANSWERED,,42.83,40.55,extractive
+300122,en,how many women did frank gifford marry,in,3,ANSWERED,,198.94,196.63,extractive
+233826,hi,बाज़ कितनी तेजी से यात्रा करता है,in,3,ANSWERED,,41.4,39.34,extractive
+233826,en,how fast does an eagle travel,in,3,ANSWERED,,45.03,42.67,extractive
+1090355,hi,स्टबहब टोल फ्री नंबर,in,3,ANSWERED,,43.53,40.96,extractive
+1090355,en,stubhub toll free number,in,3,ANSWERED,,42.91,40.8,extractive
+165349,hi,क्या डेल्टा बैंगलोर के लिए उड़ान भरता है?,in,3,ANSWERED,,41.89,39.71,extractive
+165349,en,does delta fly to bangalore,in,3,ANSWERED,,43.94,41.74,extractive
+260880,hi,कैंटालूप को कितने समय तक परिपक्व होना है,in,3,ANSWERED,,41.93,39.44,extractive
+260880,en,how long for cantaloupe to mature,in,3,ANSWERED,,46.93,44.79,extractive
+116898,hi,परिभाषा मनमानी है,in,3,ANSWERED,,41.69,39.51,extractive
+116898,en,defination arbitrary,in,3,ANSWERED,,52.94,50.84,extractive
+1060361,hi,किन्ना पारस्परिक आदान-प्रदान होता है और इसकी समस्याएं क्या हैं,in,3,ANSWERED,,44.7,42.5,extractive
+1060361,en,what is barter system and its problems,in,3,ANSWERED,,47.77,45.46,extractive
+1090353,hi,जलवायु मौसम का अध्ययन,in,3,ANSWERED,,46.75,44.4,extractive
+1090353,en,study of climate weather,in,3,ANSWERED,,44.83,42.47,extractive
+1102432,bn,কর্পোরেশন কী?,in,3,ANSWERED,,41.93,39.32,extractive
+1102431,bn,র‍্যাচেল কারসন কেন একটি বাধ্যবাধকতা সহ্য করার জন্য লিখেছিলেন,in,3,ANSWERED,,45.95,42.97,extractive
+205107,bn,সততা বা সততার সংজ্ঞা,in,3,ANSWERED,,42.03,39.62,extractive
+300122,bn,ফ্র্যাঙ্ক গিফোর্ড কতজন মহিলাকে বিয়ে করেছিলেন,in,3,ANSWERED,,42.26,40.05,extractive
+233826,bn,একটি ঈগল কত দ্রুত ভ্রমণ করে।,in,3,ANSWERED,,40.38,38.09,extractive
+1090355,bn,স্টাবহাব টোল ফ্রি নম্বর,in,3,ANSWERED,,40.7,38.1,extractive
+165349,bn,ডুবলুমধ্য বাঁক বাঁগালোরে উড়ে যায়,in,3,ANSWERED,,41.56,39.36,extractive
+260880,bn,কতদিন করে ক্যান্টালুপ পাকাবে।,in,3,ANSWERED,,40.97,38.31,extractive
+116898,bn,সংজ্ঞা নির্ধারণ নির্বিচারে,in,3,ANSWERED,,41.24,38.39,extractive
+1060361,bn,বার্টার সিস্টেম এবং এর সমস্যা কী,in,3,ANSWERED,,40.48,37.93,extractive
+1090353,bn,জলবায়ু আবহাওয়ার অধ্যয়ন,in,3,ANSWERED,,41.06,38.23,extractive
+1102432,ta,ஒரு நிறுவனம் என்பது என்ன?,in,3,ANSWERED,,41.32,38.31,extractive
+1102431,ta,ஏன் ரேச்சல் கார்சன் ஒரு கடமையை நிறைவேற்ற வேண்டும் என்று எழுதினார்,in,3,ANSWERED,,42.2,39.79,extractive
+205107,ta,நேர்மை அல்லது நேர்மையின் வரையறை,in,3,ANSWERED,,38.61,36.23,extractive
+300122,ta,ஃபிராங்க் கிஃபோர்டு எத்தனை பெண்களை திருமணம் செய்து கொண்டார்,in,3,ANSWERED,,43.66,41.37,extractive
+233826,ta,கழுகு எவ்வளவு வேகமாக பயணிக்கிறது?,in,3,ANSWERED,,41.71,39.27,extractive
+1090355,ta,ஸ்டப்ஹப் டோல் இலவச எண்,in,3,ANSWERED,,41.54,39.36,extractive
+165349,ta,டெல்டா பெங்களூருக்கு செல்கிறதா?,in,3,ANSWERED,,41.94,39.61,extractive
+260880,ta,கருவைக்கூடைகள் முதிர்ச்சியடைய எவ்வளவு காலம் ஆகும்,in,3,ANSWERED,,42.92,39.46,extractive
+116898,ta,வரையறை நிர்ணயம் தன்னிச்சையாக,in,3,REFUSED,UNGROUNDED_ANSWER,39.73,37.19,
+1060361,ta,பர்ட்டர் அமைப்பு என்றால் என்ன மற்றும் அதன் பிரச்சனைகள் என்ன?,in,3,ANSWERED,,40.72,38.61,extractive
+1090353,ta,பருவநிலை வானிலை ஆய்வு,in,3,ANSWERED,,43.23,40.97,extractive
+1102432,mr,कॉर्पोरेशन म्हणजे काय?,in,3,ANSWERED,,47.02,44.87,extractive
+1102431,mr,रॅचेल कार्सनला काय करावे लागले असे लिहिले गेले का?,in,3,ANSWERED,,45.73,43.48,extractive
+205107,mr,प्रामाणिकपणा किंवा सचोटीची व्याख्या,in,3,ANSWERED,,46.98,44.64,extractive
+300122,mr,फ्रँक गिफर्डने किती स्त्रियांशी लग्न केले,in,3,ANSWERED,,51.63,48.97,extractive
+233826,mr,गरुड किती वेगाने प्रवास करतो,in,3,ANSWERED,,49.75,47.17,extractive
+1090355,mr,स्टबहब टोल फ्री नंबर,in,3,ANSWERED,,49.86,47.05,extractive
+165349,mr,ते डेल्टा बंगलोरला जाते का?,in,3,REFUSED,OUT_OF_SCOPE,40.21,37.98,
+260880,mr,कॅन्टालूप किती काळ परिपक्व होईल,in,3,ANSWERED,,44.47,42.28,extractive
+116898,mr,व्याख्या मनमानीपणे,in,3,ANSWERED,,44.18,41.62,extractive
+1060361,mr,बार्टर प्रणाली आणि तिच्या समस्या काय आहेत,in,3,ANSWERED,,47.54,45.06,extractive
+1090353,mr,हवामानाचा अभ्यास,in,3,ANSWERED,,43.78,41.4,extractive
+1102432,hi,कॉर्पोरेशन क्या है?,in,4,ANSWERED,,46.01,42.88,extractive
+1102432,en,. what is a corporation?,in,4,ANSWERED,,48.26,45.72,extractive
+1102431,hi,रेचल कार्सन ने क्यों एक दायित्व बर्दाश्त करने के लिए लिखा,in,4,ANSWERED,,49.31,47.06,extractive
+1102431,en,why did rachel carson write an obligation to endure,in,4,ANSWERED,,56.3,53.41,extractive
+205107,hi,ईमानदारी या सच्चाई की परिभाषा,in,4,ANSWERED,,47.59,45.34,extractive
+205107,en,honesty or integrity definition,in,4,ANSWERED,,48.11,45.87,extractive
+300122,hi,फ्रैंक गिफोर्ड ने कितनी महिलाओं से शादी की,in,4,ANSWERED,,42.89,40.41,extractive
+300122,en,how many women did frank gifford marry,in,4,ANSWERED,,61.87,58.91,extractive
+233826,hi,बाज़ कितनी तेजी से यात्रा करता है,in,4,ANSWERED,,51.85,49.33,extractive
+233826,en,how fast does an eagle travel,in,4,ANSWERED,,44.95,42.57,extractive
+1090355,hi,स्टबहब टोल फ्री नंबर,in,4,ANSWERED,,45.67,43.39,extractive
+1090355,en,stubhub toll free number,in,4,ANSWERED,,43.08,40.7,extractive
+165349,hi,क्या डेल्टा बैंगलोर के लिए उड़ान भरता है?,in,4,ANSWERED,,41.68,39.47,extractive
+165349,en,does delta fly to bangalore,in,4,ANSWERED,,42.64,40.36,extractive
+260880,hi,कैंटालूप को कितने समय तक परिपक्व होना है,in,4,ANSWERED,,44.74,42.59,extractive
+260880,en,how long for cantaloupe to mature,in,4,ANSWERED,,47.87,45.47,extractive
+116898,hi,परिभाषा मनमानी है,in,4,ANSWERED,,46.54,44.04,extractive
+116898,en,defination arbitrary,in,4,ANSWERED,,57.85,55.33,extractive
+1060361,hi,किन्ना पारस्परिक आदान-प्रदान होता है और इसकी समस्याएं क्या हैं,in,4,ANSWERED,,48.05,45.75,extractive
+1060361,en,what is barter system and its problems,in,4,ANSWERED,,47.22,44.76,extractive
+1090353,hi,जलवायु मौसम का अध्ययन,in,4,ANSWERED,,44.42,42.14,extractive
+1090353,en,study of climate weather,in,4,ANSWERED,,46.52,44.13,extractive
+1102432,bn,কর্পোরেশন কী?,in,4,ANSWERED,,40.88,38.28,extractive
+1102431,bn,র‍্যাচেল কারসন কেন একটি বাধ্যবাধকতা সহ্য করার জন্য লিখেছিলেন,in,4,ANSWERED,,42.36,39.95,extractive
+205107,bn,সততা বা সততার সংজ্ঞা,in,4,ANSWERED,,39.89,37.69,extractive
+300122,bn,ফ্র্যাঙ্ক গিফোর্ড কতজন মহিলাকে বিয়ে করেছিলেন,in,4,ANSWERED,,45.29,43.03,extractive
+233826,bn,একটি ঈগল কত দ্রুত ভ্রমণ করে।,in,4,ANSWERED,,44.9,42.75,extractive
+1090355,bn,স্টাবহাব টোল ফ্রি নম্বর,in,4,ANSWERED,,39.82,37.58,extractive
+165349,bn,ডুবলুমধ্য বাঁক বাঁগালোরে উড়ে যায়,in,4,ANSWERED,,47.41,44.85,extractive
+260880,bn,কতদিন করে ক্যান্টালুপ পাকাবে।,in,4,ANSWERED,,41.24,39.01,extractive
+116898,bn,সংজ্ঞা নির্ধারণ নির্বিচারে,in,4,ANSWERED,,39.92,37.17,extractive
+1060361,bn,বার্টার সিস্টেম এবং এর সমস্যা কী,in,4,ANSWERED,,40.75,38.46,extractive
+1090353,bn,জলবায়ু আবহাওয়ার অধ্যয়ন,in,4,ANSWERED,,40.51,38.29,extractive
+1102432,ta,ஒரு நிறுவனம் என்பது என்ன?,in,4,ANSWERED,,38.65,36.25,extractive
+1102431,ta,ஏன் ரேச்சல் கார்சன் ஒரு கடமையை நிறைவேற்ற வேண்டும் என்று எழுதினார்,in,4,ANSWERED,,42.73,40.42,extractive
+205107,ta,நேர்மை அல்லது நேர்மையின் வரையறை,in,4,ANSWERED,,39.98,37.73,extractive
+300122,ta,ஃபிராங்க் கிஃபோர்டு எத்தனை பெண்களை திருமணம் செய்து கொண்டார்,in,4,ANSWERED,,43.72,41.39,extractive
+233826,ta,கழுகு எவ்வளவு வேகமாக பயணிக்கிறது?,in,4,ANSWERED,,39.98,37.8,extractive
+1090355,ta,ஸ்டப்ஹப் டோல் இலவச எண்,in,4,ANSWERED,,40.38,37.99,extractive
+165349,ta,டெல்டா பெங்களூருக்கு செல்கிறதா?,in,4,ANSWERED,,42.82,40.5,extractive
+260880,ta,கருவைக்கூடைகள் முதிர்ச்சியடைய எவ்வளவு காலம் ஆகும்,in,4,ANSWERED,,42.06,39.63,extractive
+116898,ta,வரையறை நிர்ணயம் தன்னிச்சையாக,in,4,REFUSED,UNGROUNDED_ANSWER,41.77,39.59,
+1060361,ta,பர்ட்டர் அமைப்பு என்றால் என்ன மற்றும் அதன் பிரச்சனைகள் என்ன?,in,4,ANSWERED,,45.3,43.0,extractive
+1090353,ta,பருவநிலை வானிலை ஆய்வு,in,4,ANSWERED,,42.47,40.12,extractive
+1102432,mr,कॉर्पोरेशन म्हणजे काय?,in,4,ANSWERED,,44.31,42.12,extractive
+1102431,mr,रॅचेल कार्सनला काय करावे लागले असे लिहिले गेले का?,in,4,ANSWERED,,43.95,41.78,extractive
+205107,mr,प्रामाणिकपणा किंवा सचोटीची व्याख्या,in,4,ANSWERED,,40.89,38.67,extractive
+300122,mr,फ्रँक गिफर्डने किती स्त्रियांशी लग्न केले,in,4,ANSWERED,,50.69,47.69,extractive
+233826,mr,गरुड किती वेगाने प्रवास करतो,in,4,ANSWERED,,47.37,44.64,extractive
+1090355,mr,स्टबहब टोल फ्री नंबर,in,4,ANSWERED,,42.78,40.51,extractive
+165349,mr,ते डेल्टा बंगलोरला जाते का?,in,4,REFUSED,OUT_OF_SCOPE,45.27,43.01,
+260880,mr,कॅन्टालूप किती काळ परिपक्व होईल,in,4,ANSWERED,,43.4,41.23,extractive
+116898,mr,व्याख्या मनमानीपणे,in,4,ANSWERED,,162.47,160.26,extractive
+1060361,mr,बार्टर प्रणाली आणि तिच्या समस्या काय आहेत,in,4,ANSWERED,,45.05,42.97,extractive
+1090353,mr,हवामानाचा अभ्यास,in,4,ANSWERED,,39.24,36.84,extractive
+1102432,hi,कॉर्पोरेशन क्या है?,in,5,ANSWERED,,42.81,40.42,extractive
+1102432,en,. what is a corporation?,in,5,ANSWERED,,44.1,41.53,extractive
+1102431,hi,रेचल कार्सन ने क्यों एक दायित्व बर्दाश्त करने के लिए लिखा,in,5,ANSWERED,,48.67,46.22,extractive
+1102431,en,why did rachel carson write an obligation to endure,in,5,ANSWERED,,64.36,61.28,extractive
+205107,hi,ईमानदारी या सच्चाई की परिभाषा,in,5,ANSWERED,,51.03,48.68,extractive
+205107,en,honesty or integrity definition,in,5,ANSWERED,,44.07,41.86,extractive
+300122,hi,फ्रैंक गिफोर्ड ने कितनी महिलाओं से शादी की,in,5,ANSWERED,,43.48,41.09,extractive
+300122,en,how many women did frank gifford marry,in,5,ANSWERED,,49.38,47.23,extractive
+233826,hi,बाज़ कितनी तेजी से यात्रा करता है,in,5,ANSWERED,,43.62,41.42,extractive
+233826,en,how fast does an eagle travel,in,5,ANSWERED,,43.88,41.37,extractive
+1090355,hi,स्टबहब टोल फ्री नंबर,in,5,ANSWERED,,45.96,43.59,extractive
+1090355,en,stubhub toll free number,in,5,ANSWERED,,47.86,45.4,extractive
+165349,hi,क्या डेल्टा बैंगलोर के लिए उड़ान भरता है?,in,5,ANSWERED,,47.94,45.04,extractive
+165349,en,does delta fly to bangalore,in,5,ANSWERED,,47.88,45.6,extractive
+260880,hi,कैंटालूप को कितने समय तक परिपक्व होना है,in,5,ANSWERED,,42.69,40.3,extractive
+260880,en,how long for cantaloupe to mature,in,5,ANSWERED,,62.84,60.23,extractive
+116898,hi,परिभाषा मनमानी है,in,5,ANSWERED,,44.49,42.15,extractive
+116898,en,defination arbitrary,in,5,ANSWERED,,47.91,45.22,extractive
+1060361,hi,किन्ना पारस्परिक आदान-प्रदान होता है और इसकी समस्याएं क्या हैं,in,5,ANSWERED,,42.48,40.36,extractive
+1060361,en,what is barter system and its problems,in,5,ANSWERED,,49.75,46.93,extractive
+1090353,hi,जलवायु मौसम का अध्ययन,in,5,ANSWERED,,52.69,49.97,extractive
+1090353,en,study of climate weather,in,5,ANSWERED,,48.28,45.72,extractive
+1102432,bn,কর্পোরেশন কী?,in,5,ANSWERED,,41.3,38.67,extractive
+1102431,bn,র‍্যাচেল কারসন কেন একটি বাধ্যবাধকতা সহ্য করার জন্য লিখেছিলেন,in,5,ANSWERED,,59.04,55.87,extractive
+205107,bn,সততা বা সততার সংজ্ঞা,in,5,ANSWERED,,89.81,79.33,extractive
+ood-0,en,what is the capital of India,out,0,REFUSED,OUT_OF_SCOPE,88.14,85.09,
+ood-1,en,how do I bake a chocolate cake,out,0,REFUSED,OUT_OF_SCOPE,124.55,117.42,
+ood-2,en,who won the football world cup final,out,0,REFUSED,OUT_OF_SCOPE,85.52,81.96,
+ood-3,en,what is the boiling point of water,out,0,REFUSED,OUT_OF_SCOPE,95.86,92.3,
+ood-4,en,best restaurants in Paris,out,0,REFUSED,OUT_OF_SCOPE,92.27,88.74,
+ood-5,hi,भारत की राजधानी क्या है,out,0,REFUSED,OUT_OF_SCOPE,71.48,67.98,
+ood-6,hi,चॉकलेट केक कैसे बनाते हैं,out,0,REFUSED,OUT_OF_SCOPE,112.11,109.11,
+ood-7,hi,फुटबॉल विश्व कप किसने जीता,out,0,REFUSED,OUT_OF_SCOPE,121.0,118.35,
+ood-8,bn,ভারতের রাজধানী কী,out,0,ANSWERED,,80.39,75.84,extractive
+ood-9,bn,চকলেট কেক কীভাবে বানায়,out,0,ANSWERED,,57.15,54.19,extractive
+ood-10,ta,இந்தியாவின் தலைநகர் எது,out,0,ANSWERED,,52.36,49.77,extractive
+ood-11,ta,சாக்லேட் கேக் எப்படி செய்வது,out,0,ANSWERED,,52.77,50.32,extractive
+ood-12,mr,भारताची राजधानी काय आहे,out,0,REFUSED,OUT_OF_SCOPE,52.61,49.58,
+ood-13,mr,चॉकलेट केक कसा बनवायचा,out,0,REFUSED,OUT_OF_SCOPE,58.21,55.52,
+ood-14,en,how to learn japanese quickly,out,0,REFUSED,OUT_OF_SCOPE,60.19,56.44,
+ood-15,en,what causes earthquakes,out,0,REFUSED,OUT_OF_SCOPE,49.73,47.08,
+ood-16,en,symptoms of vitamin d deficiency,out,0,REFUSED,OUT_OF_SCOPE,50.57,48.27,
+ood-17,hi,स्टॉक मार्केट में निवेश कैसे करें,out,0,REFUSED,OUT_OF_SCOPE,55.02,52.38,
+ood-18,bn,ভূমিকম্প কেন হয়,out,0,REFUSED,OUT_OF_SCOPE,54.13,50.82,
+ood-19,ta,புகைப்படம் எடுப்பது எப்படி,out,0,ANSWERED,,69.27,64.37,extractive
