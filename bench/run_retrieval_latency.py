@@ -33,9 +33,8 @@ from pydantic import BaseModel
 
 from api.retrieval.embed import embed_query
 from api.retrieval.fuse import ScoredChunk, reciprocal_rank_fusion
-from api.retrieval.qdrant_store import search_dense
+from api.retrieval.qdrant_store import search_dense_grouped
 from api.retrieval.sparse import search_sparse
-from api.retrieval.strategies import STRATEGY_IDS
 
 RETRIEVAL_SUB_BUDGET_MS = 50.0  # embed + retrieve + fuse only — see module docstring
 
@@ -69,19 +68,33 @@ def search(query: str, top_k: int = 50) -> SearchTiming:
     query_vector = embed_query(query)
     t1 = time.perf_counter()
 
-    # h.id is Qdrant's internal UUID (see ingest/build_index.py) — the
-    # payload's chunk_id is the identifier shared with the BM25 arm below.
+    # Same production shape as api/harness/pipeline.py's retrieve stage:
+    # ONE grouped dense search (top-50 per strategy, client-side bucketing)
+    # + the BM25 arm, then RRF. The per-strategy filtered-search loop this
+    # replaces measured ~600ms avg / ~611ms P95 against qdrant local mode —
+    # the payload filter forces a brute-force scan per query.
+    try:
+        dense_results = search_dense_grouped(query_vector, per_arm_k=top_k)
+        sparse_hits = search_sparse(query, top_k=top_k)
+    except ValueError as exc:
+        # Qdrant's embedded/local client raises a plain ValueError for a
+        # missing collection (its remote/HTTP client would raise
+        # UnexpectedResponse instead — we're on the local client here).
+        print(f"FAIL: {exc}")
+        print(
+            "No index found. Run ingest/build_index.py first — this "
+            "benchmark measures retrieval against a real index, not a mock."
+        )
+        sys.exit(1)
+
     ranked_lists: list[list[ScoredChunk]] = []
-    for strategy_id in STRATEGY_IDS:
-        hits = search_dense(strategy_id, query_vector, top_k=top_k)
+    for hits in dense_results:
         ranked_lists.append(
             [
                 ScoredChunk(chunk_id=(h.payload or {}).get("chunk_id", str(h.id)), score=h.score)
                 for h in hits
             ]
         )
-
-    sparse_hits = search_sparse(query, top_k=top_k)
     ranked_lists.append([ScoredChunk(chunk_id=cid, score=s) for cid, s in sparse_hits])
 
     reciprocal_rank_fusion(ranked_lists)

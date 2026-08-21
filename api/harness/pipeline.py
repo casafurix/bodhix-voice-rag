@@ -33,7 +33,7 @@ from api.normalise import detect_language, normalise_text
 from api.retrieval.assemble import AssembledChunk, assemble
 from api.retrieval.embed import embed_query
 from api.retrieval.fuse import ScoredChunk, reciprocal_rank_fusion
-from api.retrieval.qdrant_store import VECTOR_NAME, VECTOR_NAME_NVIDIA, search_dense
+from api.retrieval.qdrant_store import VECTOR_NAME, VECTOR_NAME_NVIDIA, search_dense_grouped
 from api.retrieval.sparse import search_sparse
 from api.retrieval.strategies import STRATEGY_IDS
 from api.schemas import (
@@ -123,14 +123,13 @@ async def run_retrieval_and_answer(
     query_vector = await timed(ctx, "embed", _embed())
     vector_name = VECTOR_NAME if effective_provider == "local" else VECTOR_NAME_NVIDIA
 
-    # 4. hybrid retrieve — dense arms (one per chunking strategy) + sparse,
-    # run concurrently via worker threads (search_dense/search_sparse are
-    # synchronous CPU-bound calls into Qdrant/bm25s, both of which release
-    # the GIL during the actual search, so to_thread genuinely overlaps
-    # them rather than serialising under the GIL the way bare coroutines
-    # sharing no I/O would). This is the fix for the ~285ms avg / ~480ms
-    # P95 embed+search cost documented in docs/13-build-status.md — cost
-    # should now approach max() of the 7 arms, not their sum().
+    # 4. hybrid retrieve — all dense arms come from ONE unfiltered grouped
+    # search (search_dense_grouped buckets top-k per strategy client-side;
+    # a per-strategy filtered search costs 100-150ms each in qdrant local
+    # mode — brute-force under a payload filter — which put the whole stage
+    # at ~600ms against the 200ms t_core budget). The single dense call and
+    # the BM25 arm run concurrently via worker threads; both release the GIL
+    # during their numeric work, so cost approaches max() of the two arms.
     top_k = CANDIDATES_PER_ARM if deadline.affords(80) else REDUCED_CANDIDATES_PER_ARM
     if top_k < CANDIDATES_PER_ARM:
         ctx.degrade("reduced_candidates")
@@ -142,12 +141,13 @@ async def run_retrieval_and_answer(
         # `chunk_id` field (our own human-readable id) is what both arms and
         # the assembled citations use, so RRF can actually fuse the same
         # logical chunk across dense and sparse hits.
-        dense_calls = [
-            asyncio.to_thread(search_dense, sid, query_vector, top_k=top_k, vector_name=vector_name)
-            for sid in STRATEGY_IDS
-        ]
+        dense_call = asyncio.to_thread(
+            search_dense_grouped, query_vector, top_k, vector_name
+        )
         sparse_call = asyncio.to_thread(search_sparse, text, top_k)
-        *dense_results, sparse_hits = await asyncio.gather(*dense_calls, sparse_call)
+        (dense_results, dense_cosine_scores), sparse_hits = await asyncio.gather(
+            dense_call, sparse_call
+        )
 
         ranked_lists: list[list[ScoredChunk]] = []
         chunk_payloads: dict[str, dict] = {}
@@ -165,9 +165,9 @@ async def run_retrieval_and_answer(
             )
 
         ranked_lists.append([ScoredChunk(chunk_id=cid, score=score) for cid, score in sparse_hits])
-        return ranked_lists, chunk_payloads
+        return ranked_lists, chunk_payloads, dense_cosine_scores
 
-    ranked_lists, chunk_payloads = await timed(ctx, "retrieve", _retrieve())
+    ranked_lists, chunk_payloads, dense_cosine_scores = await timed(ctx, "retrieve", _retrieve())
 
     # 5. fuse
     async def _fuse():
@@ -175,9 +175,12 @@ async def run_retrieval_and_answer(
 
     fused = await timed(ctx, "fuse", _fuse())
 
-    # 6. coverage gate — may short-circuit
+    # 6. coverage gate — may short-circuit. Runs on raw dense cosine scores
+    # (absolute coverage signal), NOT the fused RRF ranks below — RRF is
+    # rank-based and looks identical for covered and uncovered queries. See
+    # api/guardrails/coverage_gate.py for the calibration data.
     async def _coverage():
-        return coverage_verdict([c.score for c in fused])
+        return coverage_verdict(dense_cosine_scores)
 
     coverage_stats = await timed(ctx, "coverage_gate", _coverage())
 
