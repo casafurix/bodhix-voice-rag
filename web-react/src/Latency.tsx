@@ -1,4 +1,10 @@
-const BUDGET_MS = 200;
+const TEXT_BUDGET_MS = 200;
+// Mirrors api/config.py's voice_default_budget_ms — voice requests run a
+// slower NVIDIA embedding + LLM path and are budgeted very differently
+// from text, not just "the same 200ms plus STT". Showing 200ms for both
+// would make every voice request look like it's blowing its budget by
+// 30-40x when it's actually well within its own real one.
+const VOICE_BUDGET_MS = 35000;
 
 const STAGE_LABELS: Record<string, string> = {
   normalise: 'Normalise',
@@ -17,17 +23,19 @@ export function LatencyHUD({ timings }: { timings: Record<string, number> }) {
   if (!entries.length) return null;
 
   const stt = timings['stt'];
+  const isVoice = typeof stt === 'number';
+  const budgetMs = isVoice ? VOICE_BUDGET_MS : TEXT_BUDGET_MS;
   const stages = entries.filter(([k]) => k !== 'stt' && STAGE_LABELS[k]);
   const core = stages.reduce((s, [, v]) => s + v, 0);
-  const max = Math.max(...stages.map(([, v]) => v), BUDGET_MS * 0.3);
-  const within = core <= BUDGET_MS;
+  const max = Math.max(...stages.map(([, v]) => v), 20);
+  const within = core <= budgetMs;
 
   return (
     <details className="latency">
       <summary>
-        Latency — retrieval core{' '}
+        Latency — {isVoice ? 'voice' : 'text'} core{' '}
         <b className={within ? 'ok' : 'over'}>
-          {core.toFixed(1)}ms / {BUDGET_MS}ms
+          {core.toFixed(1)}ms / {budgetMs.toLocaleString()}ms
         </b>
       </summary>
       {stages.map(([k, v]) => (
