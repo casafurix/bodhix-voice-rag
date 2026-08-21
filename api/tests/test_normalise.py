@@ -15,6 +15,12 @@ def test_detect_language_uses_hint_when_given():
     assert conf == 1.0
 
 
+def test_detect_language_canonicalises_regional_hint():
+    lang, conf = detect_language("some text", lang_hint="en-IN")
+    assert lang == "en"
+    assert conf == 1.0
+
+
 def test_detect_language_detects_english():
     lang, conf = detect_language("This is a clearly written English sentence about history.")
     assert lang == "en"

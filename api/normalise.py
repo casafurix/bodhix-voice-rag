@@ -16,9 +16,14 @@ def normalise_text(text: str) -> str:
     return " ".join(text.split())
 
 
+def canonical_language_code(language: str) -> str:
+    """Convert provider regional codes such as ``en-IN`` to ``en``."""
+    return language.strip().lower().replace("_", "-").split("-", 1)[0]
+
+
 def detect_language(text: str, lang_hint: str | None = None) -> tuple[str, float]:
     if lang_hint:
-        return lang_hint, 1.0
+        return canonical_language_code(lang_hint), 1.0
     try:
         candidates = detect_langs(text)
         top = candidates[0]

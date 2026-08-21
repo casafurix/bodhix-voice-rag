@@ -28,6 +28,14 @@ def test_char_span_matches_returned_text():
     assert text[start:end] == result.text
 
 
+def test_prefers_answer_sentence_over_generic_sentence():
+    chunk = _chunk(
+        "Mount Everest is in Asia. Mount Everest has a peak elevation of 8849 metres."
+    )
+    result = select_span("How tall is Mount Everest?", chunk)
+    assert "8849 metres" in result.text
+
+
 def test_single_sentence_chunk_returns_that_sentence():
     text = "Only one sentence in this chunk."
     chunk = _chunk(text)

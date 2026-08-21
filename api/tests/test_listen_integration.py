@@ -38,10 +38,12 @@ async def _fake_generate_abstractive_answer(query, blocks, deadline):
 
 def test_listen_returns_abstractive_grounded_answer(tiny_index, monkeypatch):
     # See the matching comment in test_ask_integration.py — relaxed only for
-    # this test, to isolate voice-path wiring from coverage-gate calibration
-    # (a documented, out-of-scope gap at this fixture's tiny scale).
-    monkeypatch.setattr(coverage_gate, "TAU_MARGIN", 0.0)
-    monkeypatch.setattr(coverage_gate, "TAU_SPREAD", 0.0)
+    # this test: conftest's fake-NVIDIA vectors are hash-derived pseudo-random
+    # directions, so dense cosine scores are noise and the calibrated absolute
+    # thresholds would refuse. Isolates voice-path wiring from coverage-gate
+    # calibration (a documented, out-of-scope gap at this fixture's scale).
+    monkeypatch.setattr(coverage_gate, "TAU_ABSOLUTE", 0.0)
+    monkeypatch.setattr(coverage_gate, "TAU_MEAN", 0.0)
     monkeypatch.setattr(SarvamProvider, "transcribe", _fake_transcribe)
     monkeypatch.setattr(pipeline, "aembed_query", _fake_aembed_query)
     monkeypatch.setattr(pipeline, "generate_abstractive_answer", _fake_generate_abstractive_answer)

@@ -25,6 +25,8 @@ class SarvamProvider:
     async def transcribe(
         self, audio: bytes, lang_hint: str | None, deadline: Deadline
     ) -> Transcript:
+        if not self.api_key:
+            raise RuntimeError("SARVAM_API_KEY is not configured")
         start = time.perf_counter()
         timeout_s = max(deadline.remaining_ms, 500) / 1000.0
         async with httpx.AsyncClient(timeout=timeout_s) as client:

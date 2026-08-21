@@ -24,17 +24,23 @@ FAKE_HITS = [
     ("chunk-3", 0.85, "Madrid is the capital of Spain."),
     ("chunk-4", 0.80, "Rome is the capital of Italy."),
     ("chunk-5", 0.75, "Lisbon is the capital of Portugal."),
+    ("chunk-6", 0.70, "Vienna is the capital of Austria."),
+    ("chunk-7", 0.65, "Prague is the capital of Czechia."),
+    ("chunk-8", 0.60, "Warsaw is the capital of Poland."),
+    ("chunk-9", 0.55, "Budapest is the capital of Hungary."),
+    ("chunk-10", 0.50, "Athens is the capital of Greece."),
 ]
 
 
-def fake_search_dense(strategy_id, query_vector, top_k=50, query_filter=None, vector_name="dense"):
-    return [
+def fake_search_dense_grouped(query_vector, per_arm_k=50, vector_name="dense"):
+    hits = [
         SimpleNamespace(
             id=cid, score=score,
             payload={"chunk_id": cid, "parent_id": cid, "strategy": "s1_fixed", "text": text, "language": "en"},
         )
         for cid, score, text in FAKE_HITS
     ]
+    return [hits], [score for _, score, _ in FAKE_HITS]
 
 
 def fake_search_sparse(query, top_k=50):
@@ -43,7 +49,7 @@ def fake_search_sparse(query, top_k=50):
 
 @pytest.fixture(autouse=True)
 def _patch_retrieval(monkeypatch):
-    monkeypatch.setattr(pipeline, "search_dense", fake_search_dense)
+    monkeypatch.setattr(pipeline, "search_dense_grouped", fake_search_dense_grouped)
     monkeypatch.setattr(pipeline, "search_sparse", fake_search_sparse)
 
 
