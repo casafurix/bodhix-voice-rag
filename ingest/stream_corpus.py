@@ -26,6 +26,8 @@ REPO_ID = "ai4bharat/MSMARCO-XI"
 LANGUAGE_FILES: dict[str, str] = {
     "hi": "validation/hinval.parquet",
     "bn": "validation/benval.parquet",
+    "ta": "validation/tamval.parquet",
+    "mr": "validation/marval.parquet",
 }
 
 COLUMNS = [
