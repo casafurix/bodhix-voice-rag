@@ -23,7 +23,12 @@ _SCRIPT_RANGES: dict[str, list[tuple[int, int]]] = {
     "hi": [(0x0900, 0x097F)],  # Devanagari
     "bn": [(0x0980, 0x09FF)],  # Bengali
     "ta": [(0x0B80, 0x0BFF)],  # Tamil
-    "mr": [(0x0A80, 0x0AFF)],  # Devanagari (Marathi)
+    "mr": [(0x0900, 0x097F)],  # Devanagari (Marathi uses the same block as Hindi,
+    # NOT 0x0A80-0x0AFF -- that's Gujarati. Real bug: every Marathi passage
+    # failed script-purity with the wrong range and was silently dropped
+    # during ingest -- confirmed zero 'mr' chunks in the built index despite
+    # the language being accepted everywhere else (settings, guard_in,
+    # Sarvam). See docs/13-build-status.md.
     "en": [(0x0041, 0x005A), (0x0061, 0x007A)],  # Latin A-Z / a-z
 }
 

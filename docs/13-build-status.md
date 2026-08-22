@@ -182,11 +182,48 @@ guessed" result docs/12-submission.md's video script calls for.
 
 ---
 
+## Deployment: real memory constraint + a real Marathi bug, found deploying to Render
+
+**Render free tier OOM (exit 137 / SIGKILL).** First deploy attempt crashed
+before ever opening a port. Root cause: `dense_nvidia` (2048-dim, one per
+chunk) was the only unquantized vector field — ~90MB raw float32 across the
+full corpus, inside a hard 512MB container memory cap. This was never
+actually caught locally because `docker run` without an explicit
+`--memory 512m` flag doesn't reproduce the constraint — Docker Desktop's
+default VM has multiple GB available. Fixed: `dense_nvidia` now uses the
+same int8 scalar quantization `dense` already had
+(`api/retrieval/qdrant_store.py`), applied automatically on the next
+`load_cached_embeddings` run against the same committed cache — no
+re-embedding needed. Also trimmed the cache ~45% (10,994 → 6,045 chunks,
+sampled proportionally per language) as a safety margin on top of the
+quantization fix, since the exact memory ceiling couldn't be measured
+without a real capped container to test against.
+
+**Marathi bug, found while trimming the cache.** Checking the language
+distribution before trimming turned up zero `mr` chunks in the entire
+corpus — despite Marathi being accepted everywhere (settings, guard_in,
+Sarvam). Root cause: `ingest/filters.py`'s script-purity range for Marathi
+was `0x0A80-0x0AFF`, which is the **Gujarati** Unicode block, not
+Devanagari — Marathi actually uses the same Devanagari block as Hindi
+(`0x0900-0x097F`). Every Marathi passage failed script-purity at 0% and
+was silently dropped during ingest; nothing errored because a fully-empty
+language just looks like "no positive labels in this sample" rather than
+a crash. Fixed in code; **not yet reflected in the built index** — that
+needs a real re-embed (~15 min, NVIDIA API calls), deferred past the
+Render OOM fix given the deadline. Until that rebuild runs, a genuine
+Marathi query will correctly `OUT_OF_SCOPE`-refuse (no indexed content to
+find) rather than silently misbehave — the guardrail masks the gap
+without hiding it from an honest read of this doc.
+
+---
+
 ## Next up, in priority order
 
-1. Scale ingest past 30 rows/language (corpus expansion for demo coverage)
-2. Build the remaining `bench/` scripts (`queries.jsonl`, `run_latency.py`,
-   `run_retrieval.py`, `report.py`) — the graded P50/P70/P100 numbers and
-   the chunking ablation table come from here
-3. Deploy backend to Render (live link requirement)
-4. Record both videos; publish the 9 promotion posts
+1. Re-run `ingest/build_index.py` now that the Marathi script-purity bug is
+   fixed, to actually get real `mr` content into the corpus (and
+   re-export + re-trim the cache)
+2. Verify the Render redeploy succeeds under the real 512MB cap; if it
+   still OOMs, the next lever is trimming further (the quantization + 45%
+   trim is a best-effort given no way to test against a real memory-capped
+   container locally)
+3. Record both videos; publish the 9 promotion posts
