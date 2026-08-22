@@ -70,8 +70,7 @@ def never_call_local_embed(*args, **kwargs):
 
 @pytest.fixture(autouse=True)
 def _memory_constrained_mode(monkeypatch):
-    monkeypatch.setattr(pipeline.settings, "embedding_provider", "nvidia")
-    monkeypatch.setattr(pipeline.settings, "coverage_local_reembed", False)
+    monkeypatch.setattr(pipeline.settings, "memory_constrained_deploy", True)
     monkeypatch.setattr(pipeline, "aembed_query", fake_aembed_query)
     monkeypatch.setattr(pipeline, "search_dense_grouped", fake_search_dense_grouped)
     monkeypatch.setattr(pipeline, "search_sparse", fake_search_sparse)

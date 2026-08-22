@@ -43,14 +43,17 @@ class Settings(BaseSettings):
     # onnxruntime, was confirmed live to push the container over its cap on
     # the FIRST real query (exit 137 / 502, see docs/13-build-status.md) --
     # even after quantizing the index and tuning onnxruntime's own session
-    # options. Setting EMBEDDING_PROVIDER=nvidia routes text /ask through
-    # the same online NVIDIA embedding voice queries already use, and
-    # COVERAGE_LOCAL_REEMBED=false stops the coverage gate's own local-model
-    # fallback (api/harness/pipeline.py) from loading it anyway -- together
-    # these mean the 224MB model is never loaded in this container at all.
-    # Local dev is unaffected: both default to the exact prior behavior.
-    embedding_provider: Literal["local", "nvidia"] = "local"
-    coverage_local_reembed: bool = True
+    # options. ONE flag, not two: MEMORY_CONSTRAINED_DEPLOY=true routes text
+    # /ask through the same online NVIDIA embedding voice queries already
+    # use, AND stops the coverage gate's own local-model fallback
+    # (api/harness/pipeline.py) from loading it anyway -- both derived from
+    # this single setting rather than two independently-settable ones,
+    # after a live deploy still crashed because only one of an earlier
+    # two-flag version actually took effect (root cause never fully
+    # confirmed -- this removes the failure mode by construction instead of
+    # continuing to chase it). Local dev is unaffected: defaults to False,
+    # meaning the exact prior behavior for both.
+    memory_constrained_deploy: bool = False
     # Coarser than the MiniLM calibration (bench/run_guardrails_calibration.py,
     # 0.70/0.62) -- NVIDIA nemotron cosine showed weaker in/out-of-domain
     # separation when measured (in-min 0.248 vs out-max 0.270). Best-effort
@@ -58,6 +61,14 @@ class Settings(BaseSettings):
     # precision to the calibrated local-model path.
     nvidia_coverage_tau_absolute: float = 0.26
     nvidia_coverage_tau_mean: float = 0.20
+
+    @property
+    def embedding_provider(self) -> Literal["local", "nvidia"]:
+        return "nvidia" if self.memory_constrained_deploy else "local"
+
+    @property
+    def coverage_local_reembed(self) -> bool:
+        return not self.memory_constrained_deploy
 
     # api
     api_host: str = "0.0.0.0"
