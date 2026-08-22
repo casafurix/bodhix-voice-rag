@@ -26,7 +26,18 @@ MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
 @lru_cache
 def _model() -> TextEmbedding:
-    return TextEmbedding(model_name=MODEL_NAME)
+    # threads=1 + enable_cpu_mem_arena=False: found deploying to Render's
+    # free tier (512MB hard container cap) -- this model is lazy-loaded on
+    # the FIRST real query (never touched during startup, which is why
+    # ingest/load_cached_embeddings.py's own cold start looked fine), and
+    # loading its 224MB int8-quantized ONNX file via onnxruntime's default
+    # session options (memory arena pre-allocates larger reusable blocks,
+    # each thread gets its own scratch buffers) pushed the container over
+    # its cap mid-request -- confirmed via a live 502/exit-137 on the first
+    # /ask call, not theoretical. Both options are onnxruntime's own
+    # documented levers for memory-constrained deployments; see
+    # docs/13-build-status.md.
+    return TextEmbedding(model_name=MODEL_NAME, threads=1, enable_cpu_mem_arena=False)
 
 
 def embed_query(text: str) -> list[float]:

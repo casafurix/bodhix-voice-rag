@@ -217,6 +217,36 @@ without hiding it from an honest read of this doc.
 
 ---
 
+## Deployment, round 2: the OOM was actually the embedding model itself
+
+The quantization + trim fix above solved the *startup* OOM — the deploy
+went fully live (`Uvicorn running`, health checks passing). But the
+**first real `/ask` request** then crashed the whole container (502, then
+`/healthz` itself started failing too — the process died, not just that
+route). Root cause, confirmed by inspecting the actual cached model file:
+`paraphrase-multilingual-MiniLM-L12-v2`'s ONNX file is **224MB on disk**
+(already int8-quantized) and is lazy-loaded on first use — untouched
+during `load_cached_embeddings`, which is exactly why that phase looked
+fine. onnxruntime's default session options (a memory arena that
+pre-allocates larger reusable blocks, per-thread scratch buffers) pushed
+loading that model over the 512MB cap mid-request.
+
+Fixed in `api/retrieval/embed.py`: `TextEmbedding(threads=1,
+enable_cpu_mem_arena=False)` — both onnxruntime's own documented levers
+for memory-constrained deployments. Trimmed the cache further as
+additional safety margin (6,045 → 3,927 chunks, still proportional across
+all 4 real languages) since there's no way to verify the exact ceiling
+without a real memory-capped container to test against locally.
+
+Honest note on Render's pricing: **Starter is also 512MB RAM** — it only
+removes the spin-down/SSH restrictions, not the memory cap. Only
+**Standard ($25/month) jumps to 2GB.** If this round of fixes still isn't
+enough, the free-tier path runs out of levers beyond trimming the corpus
+further or swapping to a smaller embedding model (the latter needs a full
+re-embed + gate recalibration — expensive this close to the deadline).
+
+---
+
 ## Next up, in priority order
 
 1. Re-run `ingest/build_index.py` now that the Marathi script-purity bug is
