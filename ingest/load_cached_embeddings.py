@@ -39,6 +39,11 @@ def _point_id(chunk_id: str) -> str:
 
 
 def main() -> None:
+    # Explicit progress markers, not just a hope that stdout is line-buffered
+    # -- found deploying to Render that a stuck/slow step here shows up as a
+    # silent multi-minute gap in the platform's own logs otherwise, with no
+    # way to tell which line it died on. See docs/13-build-status.md.
+    print("[load] starting", flush=True)
     shards = sorted(OUTPUT_DIR.glob("shard_*.parquet"))
     if not shards:
         raise SystemExit(
@@ -46,17 +51,23 @@ def main() -> None:
             "`uv run python -m ingest.export_embeddings` against a built index first, "
             "or run `uv run python -m ingest.build_index` for a full (re-embedding) build."
         )
+    print(f"[load] found {len(shards)} shard(s)", flush=True)
 
     t0 = time.perf_counter()
+    print("[load] calling ensure_collection()...", flush=True)
     ensure_collection()
+    print("[load] ensure_collection() done, getting client...", flush=True)
     client = get_client()
+    print("[load] client ready, starting shard loop", flush=True)
 
     chunk_ids: list[str] = []
     embed_texts: list[str] = []
     total = 0
 
     for shard_path in shards:
+        print(f"[load] reading {shard_path.name}...", flush=True)
         df = pl.read_parquet(shard_path)
+        print(f"[load] {shard_path.name}: {len(df)} rows read, upserting...", flush=True)
         for start in range(0, len(df), UPSERT_BATCH):
             batch = df[start : start + UPSERT_BATCH]
             points = [
@@ -82,10 +93,11 @@ def main() -> None:
             chunk_ids.extend(p["chunk_id"] for p in batch.select("chunk_id").iter_rows(named=True))
             embed_texts.extend(p["embed_text"] for p in batch.select("embed_text").iter_rows(named=True))
             total += len(batch)
-        print(f"[load] {shard_path.name}: {total} chunks upserted so far")
+        print(f"[load] {shard_path.name}: {total} chunks upserted so far", flush=True)
 
+    print("[load] shard loop done, building BM25 index...", flush=True)
     build_sparse_index(chunk_ids, embed_texts)
-    print(f"[load] BM25 sparse index rebuilt over {len(chunk_ids)} chunks")
+    print(f"[load] BM25 sparse index rebuilt over {len(chunk_ids)} chunks", flush=True)
 
     elapsed = time.perf_counter() - t0
     print(f"[load] done in {elapsed:.1f}s — {total} chunks, 0 embedding API calls")

@@ -57,7 +57,8 @@ RUN uv run python -c "from api.retrieval.embed import embed_query; embed_query('
 ENV QDRANT_LOCAL_PATH=/home/appuser/app/ingest/data/qdrant_storage \
     BM25_INDEX_PATH=/home/appuser/app/ingest/data/bm25_index \
     API_HOST=0.0.0.0 \
-    PORT=7860
+    PORT=7860 \
+    PYTHONUNBUFFERED=1
 
 EXPOSE 7860
 
