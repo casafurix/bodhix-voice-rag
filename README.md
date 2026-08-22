@@ -211,22 +211,45 @@ Only rerun `uv run python -m ingest.build_index` (full re-embed, ~15+ min, calls
 every chunk) when the corpus itself changes — then `uv run python -m ingest.export_embeddings` to
 refresh the committed cache in `ingest/embeddings_cache/`.
 
-**Deploying (free): Render, Docker web service.** (Hugging Face Spaces' Docker SDK moved behind a
-paid plan on 8 July 2026, so that's no longer a free option — Render is, no credit card required.)
-The `Dockerfile` here is host-agnostic and already reads `$PORT`, so no changes are needed:
+**Deploying (free): backend on Render, frontend on Vercel.** Two separate deployments, one per
+origin — the frontend calls the backend over plain HTTPS, CORS-enabled (`api/main.py`).
+
+### Backend — Render, Docker web service
+
+(Hugging Face Spaces' Docker SDK moved behind a paid plan on 8 July 2026, so that's no longer a
+free option — Render is, no credit card required.) The `Dockerfile` here is host-agnostic and
+already reads `$PORT`, so no changes are needed:
 
 1. Push this repo to GitHub (already at `origin`).
 2. On [dashboard.render.com](https://dashboard.render.com), **New → Web Service**, connect the
-   GitHub repo. Render auto-detects the `Dockerfile`.
+   GitHub repo (`main` branch). Render auto-detects the `Dockerfile`.
 3. Under **Environment**, add `SARVAM_API_KEY` and `NVIDIA_API_KEY` (never committed — the
-   Dockerfile doesn't bake them in).
-4. Deploy. Render builds the image and runs it on the port it injects via `$PORT`.
+   Dockerfile doesn't bake them in). Optionally add `CORS_ORIGINS` once the frontend's URL from
+   step below is known (defaults to `*`, which is safe here since the API takes no cookies/auth
+   headers — see `api/config.py`).
+4. Deploy. Render builds the image and runs it on the port it injects via `$PORT`. Note the
+   resulting URL, e.g. `https://bodhix-voice-rag.onrender.com` — the frontend needs it next.
 
 The container starts by running `ingest/load_cached_embeddings.py` against the committed parquet
 cache (no re-embedding, no NVIDIA calls) and then `uvicorn` — verified locally end-to-end with
-`docker build` + `docker run`: ~75s from cold start to serving real, grounded answers. Render's
-free tier sleeps after 15 min idle and pays that cold start again on the next request; there's no
-persistent volume involved, since every start just repopulates from the cache.
+`docker build` + `docker run`. Render's free tier sleeps after 15 min idle and pays that cold
+start again on the next request; there's no persistent volume involved, since every start just
+repopulates from the cache.
+
+### Frontend — Vercel, static Vite build
+
+1. On [vercel.com](https://vercel.com), **Add New → Project**, import the same GitHub repo.
+2. Set **Root Directory** to `web-react` (Vercel auto-detects the Vite framework preset from
+   there — build command `npm run build`, output directory `dist`, no changes needed).
+3. Under **Environment Variables**, add `VITE_API_BASE_URL` = the Render URL from above (no
+   trailing slash, no `/api` suffix — `web-react/src/api.ts` appends `/ask`/`/listen`/`/healthz`
+   directly onto it; `/api` is only the *local-dev* Vite proxy prefix, see `vite.config.ts`).
+4. Deploy. Vercel gives a URL like `https://nova-bodhix.vercel.app` — that's the live link for
+   the submission form.
+
+Once both are live, loop back to Render's **Environment** tab and set `CORS_ORIGINS` to the exact
+Vercel URL (tightens the wildcard now that the real origin is known) — no code change, just an
+env var + a redeploy.
 
 ---
 

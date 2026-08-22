@@ -40,10 +40,20 @@ class Settings(BaseSettings):
     # api
     api_host: str = "0.0.0.0"
     api_port: int = 8000
+    # Wildcard by default: the frontend and backend deploy to different
+    # origins (Vercel/Netlify vs Render), and the API takes no cookies/auth
+    # headers, so a wide-open CORS policy carries no credential-leak risk.
+    # Lock this to the real frontend origin(s) via the host's env var once
+    # that URL is known, e.g. "https://nova-bodhix.vercel.app".
+    cors_origins: str = "*"
 
     @property
     def language_list(self) -> list[str]:
         return [lang.strip() for lang in self.languages.split(",") if lang.strip()]
+
+    @property
+    def cors_origin_list(self) -> list[str]:
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
 
 @lru_cache
