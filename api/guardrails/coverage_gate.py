@@ -48,15 +48,27 @@ class CoverageStats(BaseModel):
     spread: float
 
 
-def coverage_verdict(scores: list[float]) -> CoverageStats:
+def coverage_verdict(
+    scores: list[float],
+    *,
+    tau_absolute: float | None = None,
+    tau_mean: float | None = None,
+) -> CoverageStats:
     """Raises StageShortCircuit(OUT_OF_SCOPE | LOW_CONFIDENCE) or returns the
     stats to attach to the response trace on PROCEED.
 
     `scores` must be raw dense cosine similarities of the global candidate
-    set, highest first (as returned by search_dense_grouped).
+    set, highest first (as returned by search_dense_grouped). `tau_absolute`/
+    `tau_mean` override the module defaults — used by the memory-constrained
+    deployment path (api/harness/pipeline.py, settings.embedding_provider ==
+    "nvidia"), which gates on a different embedding space with its own
+    (coarser) calibration. Omit both for the default MiniLM-calibrated path.
     """
     if not scores:
         raise StageShortCircuit("OUT_OF_SCOPE", "empty candidate set")
+
+    tau_absolute = TAU_ABSOLUTE if tau_absolute is None else tau_absolute
+    tau_mean = TAU_MEAN if tau_mean is None else tau_mean
 
     top1 = scores[0]
     mean5 = mean(scores[: min(5, len(scores))])
@@ -65,10 +77,10 @@ def coverage_verdict(scores: list[float]) -> CoverageStats:
 
     stats = CoverageStats(top1=top1, mean5=mean5, margin=margin, spread=spread)
 
-    if top1 < TAU_ABSOLUTE:
-        raise StageShortCircuit("OUT_OF_SCOPE", f"top1={top1:.3f} < {TAU_ABSOLUTE}")
-    if mean5 < TAU_MEAN:
-        raise StageShortCircuit("OUT_OF_SCOPE", f"mean5={mean5:.3f} < {TAU_MEAN}")
+    if top1 < tau_absolute:
+        raise StageShortCircuit("OUT_OF_SCOPE", f"top1={top1:.3f} < {tau_absolute}")
+    if mean5 < tau_mean:
+        raise StageShortCircuit("OUT_OF_SCOPE", f"mean5={mean5:.3f} < {tau_mean}")
     if margin < TAU_MARGIN and spread < TAU_SPREAD:
         raise StageShortCircuit("LOW_CONFIDENCE", "flat score distribution")
 
