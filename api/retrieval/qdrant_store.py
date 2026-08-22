@@ -108,11 +108,22 @@ def ensure_collection() -> None:
                     )
                 ),
             ),
-            # No quantization here — small T0 corpus, and the NVIDIA-embedded
-            # field is populated once at ingest time, not latency-sensitive.
+            # Quantized for the same reason as VECTOR_NAME now, revised from
+            # the original "not latency-sensitive" call: at 2048-dim this
+            # field is the single largest memory consumer in the index
+            # (~90MB raw float32 across ~11K chunks) and Render's free tier
+            # hard-caps the whole container at 512MB RAM -- confirmed for
+            # real, not theoretical (deploy exit 137 / SIGKILL from the
+            # cgroup OOM killer, see docs/13-build-status.md). int8 scalar
+            # quantization cuts this field's raw footprint ~4x.
             VECTOR_NAME_NVIDIA: models.VectorParams(
                 size=settings.nvidia_embed_dim,
                 distance=models.Distance.COSINE,
+                quantization_config=models.ScalarQuantization(
+                    scalar=models.ScalarQuantizationConfig(
+                        type=models.ScalarType.INT8, quantile=0.99, always_ram=False
+                    )
+                ),
             ),
         },
     )
