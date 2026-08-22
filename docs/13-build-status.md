@@ -247,6 +247,43 @@ re-embed + gate recalibration — expensive this close to the deadline).
 
 ---
 
+## Deployment, round 3: eliminate the local model entirely for the free-tier path
+
+Rounds 1-2 (quantize + trim, then onnxruntime session tuning + further
+trim) reduced memory pressure but the container still crashed on the
+first real query. Checked another team's public repo
+([atul-techx/HHGoa-RAG-Model](https://github.com/atul-techx/HHGoa-RAG-Model))
+for how they handled this class of problem: they avoid it entirely by
+using classical TF-IDF instead of a neural embedding model — much lighter,
+but a real retrieval-quality regression we didn't want to copy wholesale
+this close to the deadline.
+
+Better fix using infrastructure we already had working: `settings.
+embedding_provider` (`api/config.py`) routes text `/ask` through the same
+online NVIDIA embedding voice queries already use, and `settings.
+coverage_local_reembed=False` stops the coverage gate's own local-model
+fallback (`api/harness/pipeline.py`) from loading it anyway. Together,
+the 224MB local ONNX model is **never loaded in this container at all** —
+proven at the test level, not just asserted:
+`api/tests/test_memory_constrained_deployment.py` monkeypatches
+`embed_query` to raise `AssertionError` if called, so any future
+regression that reintroduces a local-model call in this mode fails loudly
+in CI instead of silently reappearing as a production OOM.
+
+Both settings default to the exact prior behavior (`local` / `True`) —
+**local dev, all committed benchmark numbers, and the eval-loop results
+are completely unaffected.** Only the Render deployment sets
+`EMBEDDING_PROVIDER=nvidia` + `COVERAGE_LOCAL_REEMBED=false` as env vars.
+
+Tradeoff, disclosed: the deployed instance's coverage gate uses coarser,
+best-effort NVIDIA-space thresholds (`nvidia_coverage_tau_absolute`/
+`_mean` in `api/config.py`) rather than the calibrated MiniLM thresholds —
+weaker in/out-of-domain separation than the local path, by design of the
+memory constraint, not an oversight. Verified functionally correct with a
+real (non-mocked) NVIDIA API call locally before deploying.
+
+---
+
 ## Next up, in priority order
 
 1. Re-run `ingest/build_index.py` now that the Marathi script-purity bug is

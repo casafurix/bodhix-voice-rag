@@ -22,6 +22,7 @@ from typing import Literal
 
 from api.answer.abstractive import generate_answer as generate_abstractive_answer
 from api.answer.extractive import select_span
+from api.config import settings
 from api.guardrails.coverage_gate import coverage_verdict
 from api.guardrails.guard_in import run_guard_in
 from api.guardrails.guard_out import run_guard_out
@@ -63,7 +64,7 @@ async def run_ask(request: AskRequest) -> AskResponse:
             checks_passed,
             ctx,
             deadline,
-            embedding_provider="local",
+            embedding_provider=settings.embedding_provider,
             answer_mode=request.options.answer_mode,
         )
     except StageShortCircuit as short_circuit:
@@ -175,21 +176,32 @@ async def run_retrieval_and_answer(
 
     fused = await timed(ctx, "fuse", _fuse())
 
-    # 6. coverage gate — may short-circuit. Always gates on LOCAL-model
-    # cosine scores: the calibration in bench/run_guardrails_calibration.py
-    # is per-embedding-space, and the NVIDIA nemotron space shows poor
-    # in/out-of-domain separation (in-min 0.248 vs out-max 0.270, measured)
-    # while MiniLM separates cleanly (0.817 / 0.600). On the local path the
-    # retrieve-stage scores already are local cosines; on the voice/NVIDIA
-    # path we re-score the transcript with the local model (~25ms extra).
+    # 6. coverage gate — may short-circuit. Gates on LOCAL-model cosine
+    # scores by default: the calibration in
+    # bench/run_guardrails_calibration.py is per-embedding-space, and the
+    # NVIDIA nemotron space shows poor in/out-of-domain separation (in-min
+    # 0.248 vs out-max 0.270, measured) while MiniLM separates cleanly
+    # (0.817 / 0.600). On the local path the retrieve-stage scores already
+    # are local cosines; on the voice/NVIDIA path we normally re-score the
+    # transcript with the local model (~25ms extra) UNLESS
+    # settings.coverage_local_reembed is off — the memory-constrained
+    # deployment path (settings.embedding_provider == "nvidia") sets this
+    # so the local model is never loaded at all, accepting the coarser
+    # nvidia-space calibration as a documented tradeoff. See api/config.py.
     async def _coverage():
         if vector_name == VECTOR_NAME:
             return coverage_verdict(dense_cosine_scores)
-        local_vector = await asyncio.to_thread(embed_query, text)
-        _, local_scores = await asyncio.to_thread(
-            search_dense_grouped, local_vector, top_k, VECTOR_NAME
+        if settings.coverage_local_reembed:
+            local_vector = await asyncio.to_thread(embed_query, text)
+            _, local_scores = await asyncio.to_thread(
+                search_dense_grouped, local_vector, top_k, VECTOR_NAME
+            )
+            return coverage_verdict(local_scores)
+        return coverage_verdict(
+            dense_cosine_scores,
+            tau_absolute=settings.nvidia_coverage_tau_absolute,
+            tau_mean=settings.nvidia_coverage_tau_mean,
         )
-        return coverage_verdict(local_scores)
 
     coverage_stats = await timed(ctx, "coverage_gate", _coverage())
 
