@@ -22,6 +22,7 @@ node_modules/
 out/
 *.tsbuildinfo
 .vercel
+.vite/
 
 # data + model + index artefacts (large, rebuilt from ingest/)
 data/
