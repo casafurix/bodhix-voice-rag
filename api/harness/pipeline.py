@@ -116,7 +116,17 @@ async def run_retrieval_and_answer(
         if effective_provider == "nvidia":
             try:
                 return await aembed_query(text, deadline.child(min(deadline.remaining_ms, 3000)))
-            except NvidiaCallError:
+            except NvidiaCallError as exc:
+                if not settings.coverage_local_reembed:
+                    # Memory-constrained deployment mode: falling back to
+                    # embed_query() here would load the 224MB local model
+                    # this mode exists specifically to avoid -- confirmed
+                    # live that doing so OOMs the whole container (exit
+                    # 137/502), not a clean per-request error. Surface a
+                    # real, diagnosable refusal instead of crashing.
+                    raise StageShortCircuit(
+                        "INTERNAL_ERROR", f"NVIDIA embedding failed, local fallback disabled: {exc}"
+                    ) from exc
                 ctx.degrade("nvidia_embed_failed_fallback_local")
                 effective_provider = "local"
         return embed_query(text)
