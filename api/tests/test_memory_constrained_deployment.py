@@ -19,6 +19,7 @@ import pytest
 from api.harness import pipeline
 from api.harness.context import Context
 from api.harness.deadline import Deadline
+from api.llm.nvidia_client import NvidiaCallError
 from api.schemas import AskOptions, AskRequest
 
 # Scores on the nvidia-embedding-space scale (see api/config.py's
@@ -95,3 +96,24 @@ async def test_coverage_gate_uses_nvidia_thresholds_not_local_reembed():
         embedding_provider="nvidia", answer_mode="extractive",
     )
     assert response.verdict == "ANSWERED"
+
+
+@pytest.mark.asyncio
+async def test_nvidia_embed_failure_refuses_cleanly_instead_of_falling_back_to_local(monkeypatch):
+    """The exact bug this guards: a live Render deploy still crashed the
+    whole container after wiring embedding_provider=nvidia, because a
+    failed NVIDIA call silently fell back to the local model anyway --
+    exactly the OOM this mode exists to avoid. Now it must refuse cleanly
+    (INTERNAL_ERROR) rather than ever touching embed_query in this mode.
+    """
+
+    async def failing_aembed_query(text, deadline, input_type=None):
+        raise NvidiaCallError("simulated Render network failure")
+
+    monkeypatch.setattr(pipeline, "aembed_query", failing_aembed_query)
+
+    request = AskRequest(query="Where is Paris?", budget_ms=5000, options=AskOptions())
+    response = await pipeline.run_ask(request)
+
+    assert response.verdict == "REFUSED"
+    assert response.refusal_code == "INTERNAL_ERROR"
