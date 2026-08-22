@@ -11,6 +11,7 @@ from __future__ import annotations
 from typing import Literal
 
 from fastapi import FastAPI, Form, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 from api.config import settings
 from api.harness.pipeline import run_ask
@@ -18,6 +19,20 @@ from api.harness.pipeline_voice import run_ask_voice
 from api.schemas import AskRequest, AskResponse
 
 app = FastAPI(title="BodhiX Voice RAG API")
+
+# The frontend (Vercel/Netlify) and this API (Render) deploy to different
+# origins — without this, every browser request from the deployed frontend
+# is blocked before it even reaches a route. No cookies/auth headers are
+# used anywhere in this API, so allow_credentials=False + a configurable
+# origin list (settings.CORS_ORIGINS, "*" by default) carries no
+# credential-leak risk. See api/config.py.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origin_list,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/healthz")
